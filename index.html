@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradePilot 关务领航者 V6 · 全球贸易决策平台</title>
-<meta name="description" content="全球关务智能决策平台，提供关税测算、HS归类、合规检查、图像识别、物流追踪、港口天气、实时汇率、全球资讯。">
+<title>TradePilot · Global Trade Decision Platform</title>
+<meta name="description" content="Global customs intelligence platform: tariff calculation, HS classification, compliance check, image recognition, logistics tracking, live FX, trade news.">
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
   :root{
@@ -210,24 +210,24 @@
   <div class="ticker">
     <div class="ticker-track" id="ticker">
       <span>
-        <span class="flex items-center"><span class="pulse-dot"></span>📡 实时汇率</span>
+        <span class="flex items-center"><span class="pulse-dot"></span>Live FX</span>
         <span>🇺🇸 USD/CNY: <strong id="tk-usd">--</strong></span>
         <span>🇪🇺 EUR/CNY: <strong id="tk-eur">--</strong></span>
         <span>🇬🇧 GBP/CNY: <strong id="tk-gbp">--</strong></span>
         <span>🇯🇵 JPY/CNY: <strong id="tk-jpy">--</strong></span>
         <span>🇰🇷 KRW/CNY: <strong id="tk-krw">--</strong></span>
         <span>🇦🇺 AUD/CNY: <strong id="tk-aud">--</strong></span>
-        <span style="color:rgba(255,255,255,.5)">| 更新于 <span id="tk-time">--:--</span></span>
+        <span style="color:rgba(255,255,255,.5)">| Updated <span id="tk-time">--:--</span></span>
       </span>
       <span>
-        <span class="flex items-center"><span class="pulse-dot"></span>📡 实时汇率</span>
+        <span class="flex items-center"><span class="pulse-dot"></span>Live FX</span>
         <span>🇺🇸 USD/CNY: <strong id="tk-usd2">--</strong></span>
         <span>🇪🇺 EUR/CNY: <strong id="tk-eur2">--</strong></span>
         <span>🇬🇧 GBP/CNY: <strong id="tk-gbp2">--</strong></span>
         <span>🇯🇵 JPY/CNY: <strong id="tk-jpy2">--</strong></span>
         <span>🇰🇷 KRW/CNY: <strong id="tk-krw2">--</strong></span>
         <span>🇦🇺 AUD/CNY: <strong id="tk-aud2">--</strong></span>
-        <span style="color:rgba(255,255,255,.5)">| 更新于 <span id="tk-time2">--:--</span></span>
+        <span style="color:rgba(255,255,255,.5)">| Updated <span id="tk-time2">--:--</span></span>
       </span>
     </div>
   </div>
@@ -237,26 +237,26 @@
         <svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="#F8FAFC" stroke="#0F172A" stroke-width="1.6"/><circle cx="12" cy="12" r="6.2" fill="#DBEAFE" stroke="#60A5FA" stroke-width="1"/><path d="M14.9 9.1 13 13l-3.9 1.9L11 11z" fill="#F97316" stroke="#0F172A" stroke-width=".8"/><path d="M9.1 14.9 11 11l3.9-1.9L13 13z" fill="#2563EB" stroke="#0F172A" stroke-width=".8"/><circle cx="12" cy="12" r="1.2" fill="#0F172A"/></svg>
       </div>
       <div>
-        <h1>TradePilot<span>关务领航者</span></h1>
-        <p>V6 · 全球贸易决策平台</p>
+        <h1>TradePilot<span>Navigator</span></h1>
+        <p>Global Trade Decision Platform</p>
       </div>
     </div>
     <nav class="nav">
-      <a href="#calculator">关税测算</a>
-      <a href="#classify">HS归类</a>
-      <a href="#risk">合规检查</a>
-      <a href="#vision">图片归类</a>
-      <a href="#logistics">物流成本</a>
-      <a href="#tracking">物流追踪</a>
-      <a href="#exchange">汇率引擎</a>
-      <a href="#news" data-t="nav.news">全球资讯</a>
-      <a href="#batch" data-t="nav.batch">批量查询</a>
+      <a href="#calculator">Tariff Calc</a>
+      <a href="#classify">HS Classify</a>
+      <a href="#risk">Compliance</a>
+      <a href="#vision">Image ID</a>
+      <a href="#logistics">Logistics</a>
+      <a href="#tracking">Tracking</a>
+      <a href="#exchange">FX Engine</a>
+      <a href="#news" data-t="nav.news">News</a>
+      <a href="#batch" data-t="nav.batch">Batch Search</a>
     </nav>
     <div class="header-actions">
-    <button class="btn-lang" id="lang-toggle" onclick="toggleLang()">EN</button>
+    <button class="btn-lang" id="lang-toggle" onclick="toggleLang()">中文</button>
     <button class="btn-refresh" onclick="refreshAll()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round"><path d="M6.2 8.7A6.8 6.8 0 0 1 17.7 6l1.5 1.5"/><path d="M19.2 3.9v3.6h-3.6"/><path d="M17.8 15.3A6.8 6.8 0 0 1 6.3 18l-1.5-1.5"/><path d="M4.8 20.1v-3.6h3.6"/></svg>
-      <span data-t="btn.refresh">刷新</span>
+      <span data-t="btn.refresh">Refresh</span>
     </button>
     </div>
   </div>
@@ -264,17 +264,17 @@
 
 <!-- Hero -->
 <section class="hero">
-  <h2 id="hero-title">全球关务 · <span>智能决策</span> · 一站解决</h2>
-  <p data-t="hero.sub">集成 多国关税测算 · HS智能归类 · 合规风险检查 · AI图片识别 · 落地成本估算 · 实时汇率 · 全球贸易资讯</p>
+  <h2 id="hero-title">Global Customs · <span>Smart Decisions</span> · All-in-One</h2>
+  <p data-t="hero.sub">Integrated Multi-Country Tariff Calc · HS Classification · Compliance Check · AI Image Recognition · Landed Cost · Live FX · Global Trade News</p>
   <div class="hero-nav" id="hero-nav">
-    <a href="#calculator" class="hero-nav-btn hero-nav-active"><span>☆</span> <span data-t="hn.calc">多国关税测算</span></a>
-    <a href="#classify" class="hero-nav-btn"><span>◎</span> <span data-t="hn.cls">HS归类</span></a>
-    <a href="#risk" class="hero-nav-btn"><span>♡</span> <span data-t="hn.risk">合规检查</span></a>
-    <a href="#vision" class="hero-nav-btn"><span>◉</span> <span data-t="hn.vision">图片归类</span></a>
-    <a href="#batch" class="hero-nav-btn"><span>⊞</span> <span data-t="hn.batch">批量查询</span></a>
-    <a href="#logistics" class="hero-nav-btn"><span>⚑</span> <span data-t="hn.logistics">落地成本</span></a>
-    <a href="#exchange" class="hero-nav-btn"><span>☰</span> <span data-t="hn.exchange">汇率引擎</span></a>
-    <a href="#news" class="hero-nav-btn"><span>◈</span> <span data-t="hn.news">贸易实况</span></a>
+    <a href="#calculator" class="hero-nav-btn hero-nav-active"><span>☆</span> <span data-t="hn.calc">Tariff Calc</span></a>
+    <a href="#classify" class="hero-nav-btn"><span>◎</span> <span data-t="hn.cls">HS Classify</span></a>
+    <a href="#risk" class="hero-nav-btn"><span>♡</span> <span data-t="hn.risk">Compliance</span></a>
+    <a href="#vision" class="hero-nav-btn"><span>◉</span> <span data-t="hn.vision">Image ID</span></a>
+    <a href="#batch" class="hero-nav-btn"><span>⊞</span> <span data-t="hn.batch">Batch Search</span></a>
+    <a href="#logistics" class="hero-nav-btn"><span>⚑</span> <span data-t="hn.logistics">Landed Cost</span></a>
+    <a href="#exchange" class="hero-nav-btn"><span>☰</span> <span data-t="hn.exchange">FX Engine</span></a>
+    <a href="#news" class="hero-nav-btn"><span>◈</span> <span data-t="hn.news">Trade News</span></a>
   </div>
 </section>
 
@@ -288,26 +288,26 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><rect x="5" y="2.8" width="14" height="18.4" rx="2.2" fill="#F8FAFC" stroke="#0F172A" stroke-width="1.4"/><rect x="7.2" y="5" width="9.6" height="3.4" rx=".8" fill="#DBEAFE" stroke="#2563EB" stroke-width="1"/><rect x="7.2" y="10.2" width="2.4" height="2.4" rx=".5" fill="#F59E0B"/><rect x="10.8" y="10.2" width="2.4" height="2.4" rx=".5" fill="#10B981"/><rect x="14.4" y="10.2" width="2.4" height="2.4" rx=".5" fill="#60A5FA"/><rect x="7.2" y="14" width="2.4" height="2.4" rx=".5" fill="#A78BFA"/><rect x="10.8" y="14" width="2.4" height="2.4" rx=".5" fill="#F97316"/><rect x="14.4" y="14" width="2.4" height="5" rx=".5" fill="#EF4444"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="calc.title">多国关税智能测算</h3>
-      <p data-t="calc.sub">UN Comtrade + 世界银行MFN税率 · FTA优惠自动匹配 · 实时汇率换算 · 全税种核算</p>
+      <h3 data-t="calc.title">Multi-Country Tariff Calculator</h3>
+      <p data-t="calc.sub">UN Comtrade + World Bank MFN Rates · Auto FTA Matching · Live FX · All Tax Types</p>
     </div>
   </div>
   <div class="grid grid-4-lg gap-3">
-    <div class="field"><label data-t="f.hs">HS编码 *</label><input type="text" id="calc-hs" placeholder="例：85171200"></div>
-    <div class="field"><label data-t="f.value">商品价值 *</label><input type="number" id="calc-value" placeholder="例：100000"></div>
-    <div class="field"><label data-t="f.currency">货币</label>
+    <div class="field"><label data-t="f.hs">HS Code *</label><input type="text" id="calc-hs" placeholder="e.g.: 85171200"></div>
+    <div class="field"><label data-t="f.value">Value *</label><input type="number" id="calc-value" placeholder="e.g.: 100000"></div>
+    <div class="field"><label data-t="f.currency">Currency</label>
       <select id="calc-currency"><option>CNY</option><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>KRW</option><option>AUD</option></select>
     </div>
-    <div class="field"><label data-t="f.origin">原产国</label>
+    <div class="field"><label data-t="f.origin">Origin</label>
       <select id="calc-origin"></select>
     </div>
-    <div class="field"><label data-t="f.dest">目的国</label>
+    <div class="field"><label data-t="f.dest">Destination</label>
       <select id="calc-dest"></select>
     </div>
-    <div class="field"><label data-t="f.freight">运费</label><input type="number" id="calc-freight" value="0"></div>
-    <div class="field"><label data-t="f.insurance">保费</label><input type="number" id="calc-insurance" value="0"></div>
+    <div class="field"><label data-t="f.freight">Freight</label><input type="number" id="calc-freight" value="0"></div>
+    <div class="field"><label data-t="f.insurance">Insurance</label><input type="number" id="calc-insurance" value="0"></div>
     <div class="flex items-center" style="padding-top:1.25rem">
-      <button class="btn btn-accent w-full" onclick="calculateTariff()" data-t="f.calcbtn">计算税费</button>
+      <button class="btn btn-accent w-full" onclick="calculateTariff()" data-t="f.calcbtn">Calculate</button>
     </div>
   </div>
   <div id="calc-result"></div>
@@ -320,27 +320,27 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.3"/><path d="M6.5 8v7.5M8.3 8v5.2M10.7 8v7.5M13.2 8v5.2M15 8v7.5M17.5 8v5.2" stroke="#0F172A" stroke-width="1.4"/><circle cx="18" cy="16" r="2.2" fill="#F59E0B" stroke="#92400E" stroke-width=".7"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="cls.title">HS编码智能归类</h3>
-      <p data-t="cls.sub">UN Comtrade HS国际分类库 + 本地知识库 · 自动联动税率与监管</p>
+      <h3 data-t="cls.title">HS Code Classification</h3>
+      <p data-t="cls.sub">UN Comtrade HS International Database + Local Knowledge Base · Auto Tax & Regulation Linking</p>
     </div>
   </div>
   <div class="grid grid-2-md gap-4">
     <div>
-      <textarea rows="5" id="classify-text" placeholder="例：苹果iPhone 15 Pro 钛金属 6.7英寸 OLED屏幕 智能手机"></textarea>
+      <textarea rows="5" id="classify-text" placeholder="e.g.: Apple iPhone 15 Pro titanium 6.7-inch OLED smartphone"></textarea>
       <div class="flex gap-3 mt-3 items-center">
         <select id="classify-top"><option value="3">Top 3</option><option value="5" selected>Top 5</option><option value="10">Top 10</option></select>
         <button class="btn" onclick="classify()">智能归类</button>
       </div>
       <div class="flex flex-wrap gap-2 mt-3 text-xs text-muted items-center">
-        <span>快速示例：</span>
-        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('iPhone 15 智能手机')">智能手机</button>
-        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('ThinkPad 笔记本电脑')">笔记本</button>
-        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('兰蔻精华 化妆品')">化妆品</button>
-        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('Nike 运动鞋')">运动鞋</button>
+        <span data-t="cls.examples">Quick examples:</span>
+        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('iPhone 15 smartphone')">Smartphone</button>
+        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('ThinkPad laptop computer')">Laptop</button>
+        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('Lancôme serum cosmetics')">Cosmetics</button>
+        <button class="bg-muted" style="padding:.25rem .5rem;border-radius:9999px;border:none" onclick="setClassify('Nike running shoes')">Sneakers</button>
       </div>
     </div>
     <div class="space-y-2" id="classify-result">
-      <p class="text-center text-muted" style="padding:4rem 0">请输入商品信息后点击"智能归类"</p>
+      <p class="text-center text-muted" style="padding:4rem 0" data-t="cls.hint">Enter product info and click "Classify"</p>
     </div>
   </div>
 </section>
@@ -352,12 +352,12 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><path d="M12 2.7 20 6v5.7c0 5-3.25 8.35-8 9.65-4.75-1.3-8-4.65-8-9.65V6z" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.6"/><path d="M7.7 12.1 10.6 15l5.9-6.1" fill="none" stroke="#059669" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="risk.title">贸易风险与合规检查</h3>
-      <p data-t="risk.sub">管制识别 · 世界银行关税数据 · 制裁名单 · FTA协定分析</p>
+      <h3 data-t="risk.title">Trade Risk & Compliance Check</h3>
+      <p data-t="risk.sub">Export Control · World Bank Tariff Data · Sanctions List · FTA Analysis</p>
     </div>
   </div>
   <div class="grid grid-4-lg gap-3">
-    <input type="text" id="risk-hs" placeholder="HS编码 *">
+    <input type="text" id="risk-hs" placeholder="HS Code *">
     <select id="risk-origin"></select>
     <select id="risk-dest"></select>
     <button class="btn btn-danger" onclick="checkRisk()">全面检查</button>
@@ -372,8 +372,8 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><rect x="3.2" y="7.2" width="17.6" height="11.2" rx="2.4" fill="#EDE9FE" stroke="#6D28D9" stroke-width="1.5"/><path d="M5 7.2 6.7 4.6h4.2l1.3 2.6z" fill="#F59E0B"/><circle cx="12.5" cy="12.8" r="4" fill="#CFFAFE" stroke="#0891B2" stroke-width="1.5"/><circle cx="12.5" cy="12.8" r="1.8" fill="#0E7490"/><rect x="16.8" y="8.6" width="2" height="1.5" rx=".4" fill="#EF4444"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="vision.title">智能图像归类</h3>
-      <p data-t="vision.sub">AI视觉识别 · 本地推理 · 免费 (TensorFlow MobileNet v2)</p>
+      <h3 data-t="vision.title">AI Image Classification</h3>
+      <p data-t="vision.sub">AI Visual Recognition · Local Inference · Free (TensorFlow MobileNet v2)</p>
     </div>
   </div>
   <div class="grid grid-2-md gap-4">
@@ -381,15 +381,15 @@
       <div class="text-5xl text-muted mb-4">
         <svg width="48" height="48" viewBox="0 0 24 24"><path d="M7.2 18.2h10.2a4 4 0 0 0 .3-8 5.8 5.8 0 0 0-11.2-1.5 4.8 4.8 0 0 0 .7 9.5z" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5"/><path d="M12 16V9.2M9.3 11.9 12 9.2l2.7 2.7" fill="none" stroke="#F97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <h3 style="font-weight:500;margin-bottom:.5rem" data-t="vision.drop">拖拽或点击上传</h3>
-      <p class="text-muted text-sm mb-4" data-t="vision.formats">实物图/铭牌图/包装图 · JPG/PNG/WebP</p>
+      <h3 style="font-weight:500;margin-bottom:.5rem" data-t="vision.drop">Drag & drop or click to upload</h3>
+      <p class="text-muted text-sm mb-4" data-t="vision.formats">Product/label/packaging photos · JPG/PNG/WebP</p>
       <label class="btn" style="cursor:pointer">
-        <span data-t="vision.upload">上传图片</span>
+        <span data-t="vision.upload">Upload Image</span>
         <input type="file" accept="image/*" onchange="handleFile(event)">
       </label>
     </div>
     <div class="bg-muted" style="border-radius:.75rem;padding:1.5rem;min-height:280px" id="vision-result">
-      <p class="text-muted text-sm text-center" style="margin-top:8rem" data-t="vision.hint">上传图片后自动提取材质、品牌、用途等申报要素</p>
+      <p class="text-muted text-sm text-center" style="margin-top:8rem" data-t="vision.hint">Upload an image to auto-extract material, brand, and declaration elements</p>
     </div>
   </div>
 </section>
@@ -401,48 +401,48 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.4"/><path d="M7 7h4v4H7zM13 7h4v4h-4zM7 13h4v4H7zM13 13h4v4h-4z" fill="#A78BFA" stroke="#5B21B6" stroke-width=".8"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="batch.title">批量HS编码查询与关税测算</h3>
-      <p data-t="batch.sub">Excel导入导出 · 批量HS归类 · 关税计算 · UN Comtrade + 世界银行数据</p>
+      <h3 data-t="batch.title">Batch HS Code & Tariff Search</h3>
+      <p data-t="batch.sub">Excel Import/Export · Batch HS Lookup · Tariff Calculation · UN Comtrade + World Bank Data</p>
     </div>
   </div>
   <div class="grid grid-2-md gap-4 mb-4">
     <div class="bg-muted rounded-xl p-4">
-      <h4 class="font-bold text-sm mb-2" data-t="batch.step1">Step 1: 下载模板 / 手动输入</h4>
-      <p class="text-xs text-muted mb-3" data-t="batch.step1.desc">下载Excel模板，填写HS编码后上传；或直接在下方文本框输入。</p>
+      <h4 class="font-bold text-sm mb-2" data-t="batch.step1">Step 1: Download Template / Manual Input</h4>
+      <p class="text-xs text-muted mb-3" data-t="batch.step1.desc">Download the Excel template, fill in HS codes and upload; or type directly below.</p>
       <div class="flex flex-wrap gap-2">
-        <button class="btn btn-sm" onclick="downloadBatchTemplate()" data-t="batch.download">下载Excel模板</button>
-        <button class="btn btn-sm btn-muted" onclick="downloadSampleData()" data-t="batch.sample">下载示例数据</button>
+        <button class="btn btn-sm" onclick="downloadBatchTemplate()" data-t="batch.download">Download Template</button>
+        <button class="btn btn-sm btn-muted" onclick="downloadSampleData()" data-t="batch.sample">Download Sample Data</button>
       </div>
     </div>
     <div class="bg-muted rounded-xl p-4">
-      <h4 class="font-bold text-sm mb-2" data-t="batch.step2">Step 2: 上传Excel / 输入HS编码</h4>
+      <h4 class="font-bold text-sm mb-2" data-t="batch.step2">Step 2: Upload Excel / Enter HS Codes</h4>
       <div class="flex gap-2 mb-2">
         <label class="btn btn-sm btn-accent" style="cursor:pointer">
-          <span data-t="batch.upload">上传Excel文件</span>
+          <span data-t="batch.upload">Upload Excel</span>
           <input type="file" accept=".xlsx,.xls,.csv" onchange="handleBatchUpload(event)" style="display:none">
         </label>
       </div>
-      <textarea id="batch-input" rows="3" placeholder="或直接输入HS编码（每行一个或逗号分隔）&#10;例: 85171200, 84713000, 33049900" data-t-ph="batch.input.ph"></textarea>
+      <textarea id="batch-input" rows="3" placeholder="Or enter HS codes (one per line or comma-separated)&#10;e.g.: 85171200, 84713000, 33049900" data-t-ph="batch.input.ph"></textarea>
     </div>
   </div>
   <div class="flex flex-wrap gap-3 items-center mb-3">
     <div class="field" style="min-width:150px;max-width:200px">
-      <label data-t="batch.origin">原产国</label>
+      <label data-t="batch.origin">Origin</label>
       <select id="batch-origin"></select>
     </div>
     <div class="field" style="min-width:150px;max-width:200px">
-      <label data-t="batch.dest">目的国</label>
+      <label data-t="batch.dest">Destination</label>
       <select id="batch-dest"></select>
     </div>
     <div class="field" style="min-width:120px;max-width:160px">
-      <label data-t="batch.value">默认货值 (CNY)</label>
+      <label data-t="batch.value">Default Value (CNY)</label>
       <input type="number" id="batch-value" value="100000">
     </div>
     <div style="padding-top:1.15rem">
-      <button class="btn" id="batch-run-btn" onclick="runBatchSearch()" data-t="batch.run">批量查询</button>
+      <button class="btn" id="batch-run-btn" onclick="runBatchSearch()" data-t="batch.run">Batch Search</button>
     </div>
     <div style="padding-top:1.15rem">
-      <button class="btn btn-accent" id="batch-export-btn" onclick="exportBatchResults()" disabled data-t="batch.export">导出Excel结果</button>
+      <button class="btn btn-accent" id="batch-export-btn" onclick="exportBatchResults()" disabled data-t="batch.export">Export to Excel</button>
     </div>
   </div>
   <div id="batch-progress" style="display:none">
@@ -460,38 +460,38 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><path d="M2.8 7h11v8.5h-11z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/><path d="M13.8 10h4.1l3.3 3.3v2.2h-7.4z" fill="#FED7AA" stroke="#EA580C" stroke-width="1.5"/><circle cx="7" cy="17.2" r="2" fill="#0F172A"/><circle cx="17.5" cy="17.2" r="2" fill="#0F172A"/><circle cx="7" cy="17.2" r=".8" fill="#A7F3D0"/><circle cx="17.5" cy="17.2" r=".8" fill="#A7F3D0"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="log.title">落地成本估算</h3>
-      <p data-t="log.sub">全链条核算 · 商品价值 + 运费保费 + 关税增值税 + 港口杂费 = 总落地成本</p>
+      <h3 data-t="log.title">Landed Cost Estimator</h3>
+      <p data-t="log.sub">Full Chain: Goods Value + Freight & Insurance + Duties & VAT + Port Charges = Total Landed Cost</p>
     </div>
   </div>
   <div class="grid grid-4-lg gap-3">
-    <div class="field"><label data-t="f.hs">HS编码</label><input type="text" id="log-hs" placeholder="例：85171200（用于关税计算）"></div>
-    <div class="field"><label data-t="f.origin">原产国</label><select id="log-origin"></select></div>
-    <div class="field"><label data-t="f.dest">目的国</label><select id="log-dest"></select></div>
-    <div class="field"><label data-t="log.val">商品价值 (CNY)</label><input type="number" id="log-val" value="100000"></div>
-    <div class="field"><label data-t="log.mode">运输方式</label>
+    <div class="field"><label data-t="f.hs">HS Code</label><input type="text" id="log-hs" placeholder="e.g.: 85171200 (for tariff calc)"></div>
+    <div class="field"><label data-t="f.origin">Origin</label><select id="log-origin"></select></div>
+    <div class="field"><label data-t="f.dest">Destination</label><select id="log-dest"></select></div>
+    <div class="field"><label data-t="log.val">Goods Value (CNY)</label><input type="number" id="log-val" value="100000"></div>
+    <div class="field"><label data-t="log.mode">Shipping Mode</label>
       <select id="log-mode"><option value="sea-fcl">🚢 Sea FCL</option><option value="sea-lcl">🚢 Sea LCL</option><option value="air">✈️ Air</option><option value="express">📦 Express</option></select>
     </div>
-    <div class="field"><label data-t="log.container">集装箱/货量</label>
+    <div class="field"><label data-t="log.container">Container/Volume</label>
       <select id="log-container"><option value="20GP">20GP (28CBM)</option><option value="40GP">40GP (58CBM)</option><option value="40HQ">40HQ (68CBM)</option><option value="LCL">LCL (per CBM)</option></select>
     </div>
-    <div class="field"><label data-t="log.vol">体积(CBM)/重量(KG)</label><input type="number" id="log-vol" value="1"></div>
-    <div class="field"><label data-t="f.currency">货币</label>
+    <div class="field"><label data-t="log.vol">Volume(CBM)/Weight(KG)</label><input type="number" id="log-vol" value="1"></div>
+    <div class="field"><label data-t="f.currency">Currency</label>
       <select id="log-currency"><option>CNY</option><option>USD</option><option>EUR</option></select>
     </div>
     <div style="grid-column:1/-1" class="field">
-      <label data-t="log.extra">附加费用</label>
+      <label data-t="log.extra">Additional Charges</label>
       <div class="flex flex-wrap gap-3 text-xs">
-        <label class="flex items-center"><input type="checkbox" id="log-customs" checked style="width:auto;margin-right:.25rem"><span data-t="log.customs">报关费 (+¥500)</span></label>
-        <label class="flex items-center"><input type="checkbox" id="log-doc" checked style="width:auto;margin-right:.25rem"><span data-t="log.doc">单证费 (+¥300)</span></label>
-        <label class="flex items-center"><input type="checkbox" id="log-port" checked style="width:auto;margin-right:.25rem"><span data-t="log.portfee">港口操作费 (+¥800)</span></label>
-        <label class="flex items-center"><input type="checkbox" id="log-inspect" style="width:auto;margin-right:.25rem"><span data-t="log.inspect">商检费 (+¥600)</span></label>
-        <label class="flex items-center"><input type="checkbox" id="log-warehouse" style="width:auto;margin-right:.25rem"><span data-t="log.warehouse">仓储费 (+¥400)</span></label>
-        <label class="flex items-center"><input type="checkbox" id="log-delivery" style="width:auto;margin-right:.25rem"><span data-t="log.delivery">目的港派送 (+¥1200)</span></label>
+        <label class="flex items-center"><input type="checkbox" id="log-customs" checked style="width:auto;margin-right:.25rem"><span data-t="log.customs">Customs (+¥500)</span></label>
+        <label class="flex items-center"><input type="checkbox" id="log-doc" checked style="width:auto;margin-right:.25rem"><span data-t="log.doc">Documentation (+¥300)</span></label>
+        <label class="flex items-center"><input type="checkbox" id="log-port" checked style="width:auto;margin-right:.25rem"><span data-t="log.portfee">Port Handling (+¥800)</span></label>
+        <label class="flex items-center"><input type="checkbox" id="log-inspect" style="width:auto;margin-right:.25rem"><span data-t="log.inspect">Inspection (+¥600)</span></label>
+        <label class="flex items-center"><input type="checkbox" id="log-warehouse" style="width:auto;margin-right:.25rem"><span data-t="log.warehouse">Storage (+¥400)</span></label>
+        <label class="flex items-center"><input type="checkbox" id="log-delivery" style="width:auto;margin-right:.25rem"><span data-t="log.delivery">Dest. Delivery (+¥1200)</span></label>
       </div>
     </div>
     <div style="grid-column:1/-1" class="flex items-end">
-      <button class="btn" style="background:#ea580c;color:#fff;width:100%" onclick="calculateLogistics()" id="log-calc-btn" data-t="log.calcbtn">估算全链路落地成本</button>
+      <button class="btn" style="background:#ea580c;color:#fff;width:100%" onclick="calculateLogistics()" id="log-calc-btn" data-t="log.calcbtn">Estimate Full Landed Cost</button>
     </div>
   </div>
   <div id="log-result"></div>
@@ -504,17 +504,17 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><path d="M2.8 7h11v8.5h-11z" fill="#DBEAFE" stroke="#2563EB" stroke-width="1.5"/><path d="M13.8 10h4.1l3.3 3.3v2.2h-7.4z" fill="#FED7AA" stroke="#EA580C" stroke-width="1.5"/><circle cx="7" cy="17.2" r="2" fill="#0F172A"/><circle cx="17.5" cy="17.2" r="2" fill="#0F172A"/><circle cx="7" cy="17.2" r=".8" fill="#A7F3D0"/><circle cx="17.5" cy="17.2" r=".8" fill="#A7F3D0"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="track.title">国际物流追踪</h3>
-      <p data-t="track.sub">智能识别承运商 · DHL/FedEx/UPS/EMS/顺丰/中通/圆通/Maersk · 多平台追踪</p>
+      <h3 data-t="track.title">Intl. Shipment Tracking</h3>
+      <p data-t="track.sub">Auto Carrier Detection · DHL/FedEx/UPS/EMS/SF/ZTO/YTO/Maersk · Multi-platform</p>
     </div>
   </div>
   <div class="flex gap-2 flex-wrap">
-    <input type="text" id="track-num" placeholder="输入运单号（DHL/FedEx/EMS/SF/...）" class="flex-1">
+    <input type="text" id="track-num" placeholder="Enter tracking number (DHL/FedEx/EMS/SF/...)" class="flex-1">
     <button class="btn" id="track-btn" onclick="trackPackage()">追踪</button>
   </div>
   <div id="track-error"></div>
   <div id="track-result" class="mt-3 max-h-80 space-y-2"></div>
-  <p class="text-xs text-muted mt-3" data-t="track.note">自动识别运单承运商 · 支持 17track / Parcels App / Ship24 / 承运商官网多平台追踪</p>
+  <p class="text-xs text-muted mt-3" data-t="track.note">Auto carrier detection · 17track / Parcels App / Ship24 / Carrier official sites</p>
 </section>
 
 <!-- Exchange -->
@@ -524,15 +524,15 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" fill="#ECFDF5" stroke="#059669" stroke-width="1.4"/><path d="M6.2 16.8h11.6M6.2 6.2v10.6" stroke="#065F46" stroke-width="1.2" stroke-linecap="round"/><path d="M7 14.7 10 11l2.6 2.1 4.5-6" fill="none" stroke="#F59E0B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17.1" cy="7.1" r="1.8" fill="#2563EB"/></svg>
     </div>
     <div class="module-title">
-      <h3 data-t="ex.title">实时金融汇率引擎</h3>
-      <p data-t="ex.sub">Frankfurter API · 历史走势缓存到 memory · 多币种自动折算</p>
+      <h3 data-t="ex.title">Live FX Rate Engine</h3>
+      <p data-t="ex.sub">Frankfurter API · Historical Trends · Multi-currency Conversion</p>
     </div>
   </div>
   <div class="grid grid-3-lg gap-4">
     <div class="space-y-2">
       <input type="number" id="ex-amount" value="1000" class="text-lg font-bold">
       <select id="ex-from"></select>
-      <button class="btn btn-muted w-full" onclick="swapCurrency()" data-t="ex.swap">⇅ 互换</button>
+      <button class="btn btn-muted w-full" onclick="swapCurrency()" data-t="ex.swap">⇅ Swap</button>
       <select id="ex-to"></select>
       <div class="alert alert-info text-center">
         <p class="text-2xl font-bold text-primary" id="ex-result">--</p>
@@ -541,17 +541,17 @@
     </div>
     <div style="grid-column:2/4">
       <div class="tabs">
-        <button class="tab active" onclick="setExTab('live',this)" data-t="ex.live">实时汇率表</button>
-        <button class="tab" onclick="setExTab('history',this)" data-t="ex.hist">历史走势图</button>
+        <button class="tab active" onclick="setExTab('live',this)" data-t="ex.live">Live Rates</button>
+        <button class="tab" onclick="setExTab('history',this)" data-t="ex.hist">Historical Chart</button>
       </div>
       <div id="ex-live">
-        <table class="table"><thead><tr><th data-t="ex.cur">货币</th><th class="text-right" data-t="ex.rate">汇率(CNY)</th></tr></thead><tbody id="ex-table"></tbody></table>
+        <table class="table"><thead><tr><th data-t="ex.cur">Currency</th><th class="text-right" data-t="ex.rate">Rate (CNY)</th></tr></thead><tbody id="ex-table"></tbody></table>
       </div>
       <div id="ex-history" style="display:none">
         <div class="flex flex-wrap gap-2 mb-3 items-center">
           <select id="ex-chart-cur"></select>
           <select id="ex-period"><option value="7">7d</option><option value="30" selected>30d</option><option value="90">90d</option></select>
-          <button class="btn btn-sm" id="ex-update-btn" onclick="loadHistory()" data-t="ex.update">更新</button>
+          <button class="btn btn-sm" id="ex-update-btn" onclick="loadHistory()" data-t="ex.update">Refresh</button>
           <span class="text-xs text-muted" id="ex-source">--</span>
         </div>
         <div class="chart-container" id="ex-chart-wrap"></div>
@@ -567,29 +567,29 @@
       <svg width="28" height="28" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#CFFAFE" stroke="#0891B2" stroke-width="1.5"/><path d="M4.8 12h14.4M12 3.2c2.3 2.2 3.2 5 3.2 8.8s-.9 6.6-3.2 8.8M12 3.2C9.7 5.4 8.8 8.2 8.8 12s.9 6.6 3.2 8.8" stroke="#0E7490" stroke-width=".9" fill="none"/><path d="M10.5 6.1c1.8-.7 3.8 0 5 1.3.8.9.1 1.8-.9 1.8-1.3 0-2 .7-2.6 1.7-.7 1.1-2 1.4-3.1.8-1.3-.8-.7-2.5.4-3.3.7-.5.4-1.7 1.2-2.3z" fill="#16A34A"/><path d="M13.4 14.6c1.8-.2 3.3 1.1 3.9 2.4-1 1-2.2 1.8-3.7 2.1-.9-.8-1.6-2.6-.2-4.5z" fill="#22C55E"/></svg>
     </div>
     <div class="module-title">
-      <h3>全球贸易实况</h3>
-      <p>关税·国际事务专题聚合 · WTO/UNCTAD/PIIE/BBC/CNBC 实时抓取 · 贸易关键词过滤</p>
+      <h3 data-t="news.title">Global Trade Live</h3>
+      <p data-t="news.sub">Tariff & Intl. Affairs Aggregation · WTO/UNCTAD/PIIE/BBC/CNBC Live RSS · Trade Keyword Filter</p>
     </div>
   </div>
-  <input type="text" id="news-q" placeholder="🔍 搜索资讯（如：反倾销、RCEP、制裁...）" oninput="filterNews()">
+  <input type="text" id="news-q" placeholder="🔍 Search news (e.g.: anti-dumping, RCEP, sanctions...)" oninput="filterNews()">
   <div class="space-y-2 mt-4" id="news-list"></div>
   <div class="flex items-center justify-center gap-2 mt-4" id="news-paginate" style="display:none">
-    <button class="page-btn" id="news-prev" onclick="changePage(-1)">上一页</button>
+    <button class="page-btn" id="news-prev" onclick="changePage(-1)" data-t="news.prev">Prev</button>
     <span class="text-sm" id="news-page">1 / 1</span>
-    <button class="page-btn" id="news-next" onclick="changePage(1)">下一页</button>
+    <button class="page-btn" id="news-next" onclick="changePage(1)" data-t="news.next">Next</button>
   </div>
 </section>
 
 <!-- Disclaimer -->
 <div class="disclaimer" data-t="disclaimer">
-  <strong>免责声明：</strong>本平台所有计算结果、汇率数据及资讯摘要仅供参考，不构成法律或商业建议。实际关税以海关最终判定为准。
+  <strong>Disclaimer:</strong> All calculations, FX data, and news summaries are for reference only. They do not constitute legal or commercial advice. Actual duties are subject to customs determination.
 </div>
 
 </main>
 
 <footer class="footer">
-  <p data-t="footer.copy">© 2026 TradePilot 关务领航者 V6 · 全球贸易决策平台</p>
-  <p style="margin-top:.25rem" data-t="footer.data">数据：UN Comtrade（HS归类）· 世界银行（关税指标）· WTO/UNCTAD/BBC/CNBC RSS（资讯）· Frankfurter（汇率）· 17track（物流）</p>
+  <p data-t="footer.copy">© 2026 TradePilot · Global Trade Decision Platform</p>
+  <p style="margin-top:.25rem" data-t="footer.data">Data: UN Comtrade (HS) · World Bank (Tariffs) · WTO/UNCTAD/BBC/CNBC RSS (News) · Frankfurter (FX) · 17track (Logistics)</p>
 </footer>
 
 <script>
@@ -658,15 +658,16 @@ const FTA_DB = {
   'CN_SA':{name:'中国-海合会FTA(谈判中)',reduction:0,cert:'一般原产地证书 (CO)'},
 };
 const COUNTRIES = [
-  {code:'CN',flag:'🇨🇳',name:'中国'},{code:'US',flag:'🇺🇸',name:'美国'},{code:'JP',flag:'🇯🇵',name:'日本'},{code:'KR',flag:'🇰🇷',name:'韩国'},
-  {code:'DE',flag:'🇩🇪',name:'德国'},{code:'GB',flag:'🇬🇧',name:'英国'},{code:'FR',flag:'🇫🇷',name:'法国'},{code:'IT',flag:'🇮🇹',name:'意大利'},
-  {code:'AU',flag:'🇦🇺',name:'澳大利亚'},{code:'NZ',flag:'🇳🇿',name:'新西兰'},{code:'CA',flag:'🇨🇦',name:'加拿大'},
-  {code:'VN',flag:'🇻🇳',name:'越南'},{code:'TH',flag:'🇹🇭',name:'泰国'},{code:'MY',flag:'🇲🇾',name:'马来西亚'},
-  {code:'ID',flag:'🇮🇩',name:'印度尼西亚'},{code:'PH',flag:'🇵🇭',name:'菲律宾'},
-  {code:'SG',flag:'🇸🇬',name:'新加坡'},{code:'IN',flag:'🇮🇳',name:'印度'},{code:'BR',flag:'🇧🇷',name:'巴西'},
-  {code:'MX',flag:'🇲🇽',name:'墨西哥'},{code:'RU',flag:'🇷🇺',name:'俄罗斯'},{code:'SA',flag:'🇸🇦',name:'沙特阿拉伯'},
-  {code:'AE',flag:'🇦🇪',name:'阿联酋'},{code:'TR',flag:'🇹🇷',name:'土耳其'},{code:'ZA',flag:'🇿🇦',name:'南非'},
+  {code:'CN',flag:'🇨🇳',name:'China',zh:'中国'},{code:'US',flag:'🇺🇸',name:'USA',zh:'美国'},{code:'JP',flag:'🇯🇵',name:'Japan',zh:'日本'},{code:'KR',flag:'🇰🇷',name:'South Korea',zh:'韩国'},
+  {code:'DE',flag:'🇩🇪',name:'Germany',zh:'德国'},{code:'GB',flag:'🇬🇧',name:'UK',zh:'英国'},{code:'FR',flag:'🇫🇷',name:'France',zh:'法国'},{code:'IT',flag:'🇮🇹',name:'Italy',zh:'意大利'},
+  {code:'AU',flag:'🇦🇺',name:'Australia',zh:'澳大利亚'},{code:'NZ',flag:'🇳🇿',name:'New Zealand',zh:'新西兰'},{code:'CA',flag:'🇨🇦',name:'Canada',zh:'加拿大'},
+  {code:'VN',flag:'🇻🇳',name:'Vietnam',zh:'越南'},{code:'TH',flag:'🇹🇭',name:'Thailand',zh:'泰国'},{code:'MY',flag:'🇲🇾',name:'Malaysia',zh:'马来西亚'},
+  {code:'ID',flag:'🇮🇩',name:'Indonesia',zh:'印度尼西亚'},{code:'PH',flag:'🇵🇭',name:'Philippines',zh:'菲律宾'},
+  {code:'SG',flag:'🇸🇬',name:'Singapore',zh:'新加坡'},{code:'IN',flag:'🇮🇳',name:'India',zh:'印度'},{code:'BR',flag:'🇧🇷',name:'Brazil',zh:'巴西'},
+  {code:'MX',flag:'🇲🇽',name:'Mexico',zh:'墨西哥'},{code:'RU',flag:'🇷🇺',name:'Russia',zh:'俄罗斯'},{code:'SA',flag:'🇸🇦',name:'Saudi Arabia',zh:'沙特阿拉伯'},
+  {code:'AE',flag:'🇦🇪',name:'UAE',zh:'阿联酋'},{code:'TR',flag:'🇹🇷',name:'Turkey',zh:'土耳其'},{code:'ZA',flag:'🇿🇦',name:'South Africa',zh:'南非'},
 ];
+function cLabel(c){ const n = currentLang==='zh' ? c.zh : c.name; return c.flag+' '+c.code+' '+n; }
 const CURRENCIES = ['CNY','USD','EUR','GBP','JPY','KRW','AUD'];
 const PORTS = [
   {code:'SHA',name:'上海',lat:31.23,lon:121.47},{code:'SZX',name:'深圳',lat:22.54,lon:114.05},
@@ -675,16 +676,16 @@ const PORTS = [
   {code:'TYO',name:'东京',lat:35.65,lon:139.84},{code:'SEL',name:'首尔/釜山',lat:35.18,lon:129.07},
 ];
 const NEWS_DB = [
-  {title:'美国对中国301关税复审：部分电子产品加征25%额外关税',source:'路透社',time:'2小时前',tag:'urgent',category:'紧急预警',url:'https://www.reuters.com/world/china/',summary:'USTR 完成对华 301 条款四年期复审，对部分电子产品维持并加征 25% 额外关税。涉及智能手机零部件、半导体设备等品类，预计 60 天内执行。'},
-  {title:'RCEP对印度尼西亚正式生效，中日韩东盟贸易壁垒进一步削减',source:'新华社',time:'5小时前',tag:'trade',category:'贸易协定',url:'http://www.xinhuanet.com/english/',summary:'RCEP 对印尼正式生效，区域内 90% 以上货物贸易最终实现零关税。建议申报时核对 RCEP 原产地证书 (Form RCEP) 享受优惠税率。'},
-  {title:'欧盟碳边境调节机制(CBAM)过渡期实施细则更新解读',source:'欧盟委员会',time:'8小时前',tag:'policy',category:'政策法规',url:'https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en',summary:'CBAM 过渡期申报细则正式更新，钢铁、水泥、铝、化肥、电力、氢气六大行业进口商须按季度提交隐含碳排放数据。2026 年 1 月起进入征税阶段。'},
-  {title:'美国OFAC更新SDN制裁名单，新增6家中国科技企业',source:'OFAC官网',time:'12小时前',tag:'sanction',category:'制裁合规',url:'https://ofac.treasury.gov/sanctions-list-search-tool',summary:'OFAC 最新一轮 SDN 名单新增 6 家中国科技企业，主要涉及 AI 芯片与无人机供应链。第三方与其交易亦可能触发次级制裁。'},
-  {title:'中国海关总署2024年第15号公告：调整部分商品监管条件',source:'海关总署',time:'1天前',tag:'policy',category:'政策法规',url:'http://www.customs.gov.cn/',summary:'海关总署调整部分 HS 商品监管条件代码，涉及医疗器械、化学品、动植物制品共 142 项。新增 CCC 认证、入境检疫等要求。'},
-  {title:'全球集装箱运价SCFI连续三周上涨，美西线涨幅超10%',source:'上海航交所',time:'1天前',tag:'trade',category:'贸易协定',url:'https://en.sse.net.cn/indices/scfinew.jsp',summary:'SCFI 综合指数报 2150 点，环比上涨 5.2%。美西航线 40HQ 运价涨破 4500 美元，建议尽早锁舱或采用 LCL 拼箱降低成本。'},
-  {title:'日本经济产业省拟修订出口管制清单，先进半导体设备列入审查',source:'日经新闻',time:'2天前',tag:'sanction',category:'制裁合规',url:'https://asia.nikkei.com/Business/Tech/Semiconductors',summary:'METI 拟将 23 类先进半导体制造设备纳入出口许可管理，预计 2025 年 Q1 实施，企业应提前梳理订单交付计划。'},
-  {title:'英国UKCA标志过渡期延长至2025年底，CE标志继续接受',source:'英国政府',time:'2天前',tag:'policy',category:'政策法规',url:'https://www.gov.uk/guidance/using-the-ukca-marking',summary:'英国商业贸易部宣布 UKCA 强制实施日期延后至 2025 年 12 月 31 日，期间 CE 标志的产品仍可在英国市场流通。'},
-  {title:'越南对华铝型材反倾销调查终裁：税率2.1%至35.5%不等',source:'越南工贸部',time:'3天前',tag:'urgent',category:'紧急预警',url:'https://moit.gov.vn/',summary:'越南工贸部公布对华铝型材反倾销终裁结果，5 家应诉企业税率为 2.1%-12.4%，其余出口商统一适用 35.5% 高税率。'},
-  {title:'中欧班列2024年开行量突破1万列，同比增长12%创历史新高',source:'中国铁路',time:'3天前',tag:'trade',category:'贸易协定',url:'http://www.china-railway.com.cn/',summary:'中欧班列累计开行 10243 列，发送货物 109.5 万 TEU。新增义乌-马德里、西安-杜伊斯堡等多条精品线路。'},
+  {title:'美国对中国301关税复审：部分电子产品加征25%额外关税',source:'路透社',time:'2小时前',tag:'urgent',category:'Tariff Alert',url:'https://www.reuters.com/world/china/',summary:'USTR 完成对华 301 条款四年期复审，对部分电子产品维持并加征 25% 额外关税。涉及智能手机零部件、半导体设备等品类，预计 60 天内执行。'},
+  {title:'RCEP对印度尼西亚正式生效，中日韩东盟贸易壁垒进一步削减',source:'新华社',time:'5小时前',tag:'trade',category:'Trade Agreement',url:'http://www.xinhuanet.com/english/',summary:'RCEP 对印尼正式生效，区域内 90% 以上货物贸易最终实现零关税。建议申报时核对 RCEP 原产地证书 (Form RCEP) 享受优惠税率。'},
+  {title:'欧盟碳边境调节机制(CBAM)过渡期实施细则更新解读',source:'欧盟委员会',time:'8小时前',tag:'policy',category:'Policy',url:'https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en',summary:'CBAM 过渡期申报细则正式更新，钢铁、水泥、铝、化肥、电力、氢气六大行业进口商须按季度提交隐含碳排放数据。2026 年 1 月起进入征税阶段。'},
+  {title:'美国OFAC更新SDN制裁名单，新增6家中国科技企业',source:'OFAC官网',time:'12小时前',tag:'sanction',category:'Sanctions',url:'https://ofac.treasury.gov/sanctions-list-search-tool',summary:'OFAC 最新一轮 SDN 名单新增 6 家中国科技企业，主要涉及 AI 芯片与无人机供应链。第三方与其交易亦可能触发次级制裁。'},
+  {title:'中国海关总署2024年第15号公告：调整部分商品监管条件',source:'海关总署',time:'1天前',tag:'policy',category:'Policy',url:'http://www.customs.gov.cn/',summary:'海关总署调整部分 HS 商品监管条件代码，涉及医疗器械、化学品、动植物制品共 142 项。新增 CCC 认证、入境检疫等要求。'},
+  {title:'全球集装箱运价SCFI连续三周上涨，美西线涨幅超10%',source:'上海航交所',time:'1天前',tag:'trade',category:'Trade Agreement',url:'https://en.sse.net.cn/indices/scfinew.jsp',summary:'SCFI 综合指数报 2150 点，环比上涨 5.2%。美西航线 40HQ 运价涨破 4500 美元，建议尽早锁舱或采用 LCL 拼箱降低成本。'},
+  {title:'日本经济产业省拟修订出口管制清单，先进半导体设备列入审查',source:'日经新闻',time:'2天前',tag:'sanction',category:'Sanctions',url:'https://asia.nikkei.com/Business/Tech/Semiconductors',summary:'METI 拟将 23 类先进半导体制造设备纳入出口许可管理，预计 2025 年 Q1 实施，企业应提前梳理订单交付计划。'},
+  {title:'英国UKCA标志过渡期延长至2025年底，CE标志继续接受',source:'英国政府',time:'2天前',tag:'policy',category:'Policy',url:'https://www.gov.uk/guidance/using-the-ukca-marking',summary:'英国商业贸易部宣布 UKCA 强制实施日期延后至 2025 年 12 月 31 日，期间 CE 标志的产品仍可在英国市场流通。'},
+  {title:'越南对华铝型材反倾销调查终裁：税率2.1%至35.5%不等',source:'越南工贸部',time:'3天前',tag:'urgent',category:'Tariff Alert',url:'https://moit.gov.vn/',summary:'越南工贸部公布对华铝型材反倾销终裁结果，5 家应诉企业税率为 2.1%-12.4%，其余出口商统一适用 35.5% 高税率。'},
+  {title:'中欧班列2024年开行量突破1万列，同比增长12%创历史新高',source:'中国铁路',time:'3天前',tag:'trade',category:'Trade Agreement',url:'http://www.china-railway.com.cn/',summary:'中欧班列累计开行 10243 列，发送货物 109.5 万 TEU。新增义乌-马德里、西安-杜伊斯堡等多条精品线路。'},
 ];
 const CODE_DESC = {
   0:'晴',1:'多云',2:'局部多云',3:'阴',45:'雾',48:'雾凇',51:'小毛雨',53:'毛雨',55:'强毛雨',
@@ -714,17 +715,17 @@ async function invokeFunction(name, body) {
 // --- Live Trade News via RSS feeds (rss2json.com, free 10k/day) ---
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
 const NEWS_FEEDS_API = [
-  { url:'https://www.wto.org/english/news_e/news_e.rss', source:'WTO 世贸组织', tag:'policy', cat:'关务政策', filter:false },
-  { url:'https://unctad.org/rss.xml', source:'UNCTAD 联合国贸发', tag:'trade', cat:'贸易资讯', filter:false },
-  { url:'https://www.piie.com/research/all/rss.xml', source:'PIIE 彼得森国际经济研究所', tag:'policy', cat:'关税研究', filter:true },
-  { url:'https://feeds.bbci.co.uk/news/business/rss.xml', source:'BBC 国际财经', tag:'trade', cat:'国际事务', filter:true },
-  { url:'https://www.cnbc.com/id/10000664/device/rss/rss.html', source:'CNBC', tag:'trade', cat:'国际事务', filter:true },
-  { url:'https://globaltradealert.org/latest/feed', source:'GTA 全球贸易预警', tag:'urgent', cat:'紧急预警', filter:false },
-  { url:'https://www.ifo.de/en/rss/feed', source:'ifo Institute', tag:'policy', cat:'经济政策', filter:true },
-  { url:'https://feeds.reuters.com/reuters/businessNews', source:'Reuters 路透社', tag:'trade', cat:'国际事务', filter:true },
-  { url:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', source:'NYT 纽约时报', tag:'trade', cat:'国际事务', filter:true },
-  { url:'https://www.scmp.com/rss/91/feed', source:'SCMP 南华早报', tag:'trade', cat:'亚太贸易', filter:true },
-  { url:'https://www.ft.com/?format=rss', source:'FT 金融时报', tag:'policy', cat:'金融政策', filter:true },
+  { url:'https://www.wto.org/english/news_e/news_e.rss', source:'WTO', tag:'policy', cat:'Customs Policy', filter:false },
+  { url:'https://unctad.org/rss.xml', source:'UNCTAD', tag:'trade', cat:'Trade', filter:false },
+  { url:'https://www.piie.com/research/all/rss.xml', source:'PIIE', tag:'policy', cat:'Tariff Research', filter:true },
+  { url:'https://feeds.bbci.co.uk/news/business/rss.xml', source:'BBC Business', tag:'trade', cat:'Intl. Affairs', filter:true },
+  { url:'https://www.cnbc.com/id/10000664/device/rss/rss.html', source:'CNBC', tag:'trade', cat:'Intl. Affairs', filter:true },
+  { url:'https://globaltradealert.org/latest/feed', source:'GTA', tag:'urgent', cat:'Tariff Alert', filter:false },
+  { url:'https://www.ifo.de/en/rss/feed', source:'ifo Institute', tag:'policy', cat:'Economic Policy', filter:true },
+  { url:'https://feeds.reuters.com/reuters/businessNews', source:'Reuters', tag:'trade', cat:'Intl. Affairs', filter:true },
+  { url:'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', source:'NYT', tag:'trade', cat:'Intl. Affairs', filter:true },
+  { url:'https://www.scmp.com/rss/91/feed', source:'SCMP', tag:'trade', cat:'Asia-Pacific Trade', filter:true },
+  { url:'https://www.ft.com/?format=rss', source:'FT', tag:'policy', cat:'Financial Policy', filter:true },
 ];
 // Keywords to filter general feeds — only keep trade/tariff/intl affairs articles
 const TRADE_KEYWORDS = /tariff|trade|import|export|customs|sanction|embargo|quota|dumping|subsid|wto|fta|rcep|cptpp|nafta|usmca|duty|excise|border|freight|cargo|shipping|container|supply.chain|geopolit|diplomat|g7|g20|brics|nato|eu\b|european.union|china|us-china|biden|xi jinping|summit|treaty|agreement|bilateral|multilateral|protectionism|retaliation|countervail|safeguard|anti.dumping|section.301|section.232|cbam|carbon.border|vat|gst|fiscal|monetary|inflation|gdp|recession|currency|forex|imf|world.bank|economic|commerce|merchant|industrial.policy|关税|贸易|进出口|海关|制裁|反倾销|补贴|配额|自贸|经济|外交|国际/i;
@@ -745,10 +746,10 @@ function timeAgo(dateStr) {
 
 function classifyNewsTag(title, desc) {
   const t = (title + ' ' + desc).toLowerCase();
-  if (/sanction|制裁|ofac|sdn|blacklist|embargo|ban\b/i.test(t)) return { tag:'sanction', cat:'制裁合规' };
-  if (/tariff|关税|anti-dumping|反倾销|countervail|301|232|safeguard|duties/i.test(t)) return { tag:'urgent', cat:'紧急预警' };
-  if (/regulation|policy|法规|政策|customs|海关|cbam|carbon|compliance|rule/i.test(t)) return { tag:'policy', cat:'政策法规' };
-  return { tag:'trade', cat:'贸易资讯' };
+  if (/sanction|制裁|ofac|sdn|blacklist|embargo|ban\b/i.test(t)) return { tag:'sanction', cat:'Sanctions' };
+  if (/tariff|关税|anti-dumping|反倾销|countervail|301|232|safeguard|duties/i.test(t)) return { tag:'urgent', cat:'Tariff Alert' };
+  if (/regulation|policy|法规|政策|customs|海关|cbam|carbon|compliance|rule/i.test(t)) return { tag:'policy', cat:'Policy' };
+  return { tag:'trade', cat:'Trade' };
 }
 
 async function fetchLiveNews() {
@@ -767,14 +768,14 @@ async function fetchLiveNews() {
           if (feed.filter && !TRADE_KEYWORDS.test(text)) return;
           const autoTag = classifyNewsTag(item.title || '', plainDesc);
           allNews.push({
-            title: item.title || '(无标题)',
+            title: item.title || '(No title)',
             source: feed.source,
             time: timeAgo(item.pubDate),
             pubDate: new Date(item.pubDate),
             tag: feed.tag !== 'trade' ? feed.tag : autoTag.tag,
-            category: feed.cat !== '贸易资讯' && feed.cat !== '国际事务' ? feed.cat : autoTag.cat,
+            category: feed.cat !== 'Trade' && feed.cat !== 'Intl. Affairs' ? feed.cat : autoTag.cat,
             url: item.link || '#',
-            summary: plainDesc.substring(0, 220) || '点击查看详情'
+            summary: plainDesc.substring(0, 220) || 'Click to read more'
           });
         });
       }
@@ -1180,18 +1181,18 @@ function populateSelect(id,items,valueKey,labelFn){
 function init(){
   loadRatesFromCache(); fetchRates();
   const zh = currentLang==='zh';
-  populateSelect('calc-origin',COUNTRIES,'code',c=>c.flag+' '+c.name);
-  populateSelect('calc-dest',COUNTRIES,'code',c=>c.flag+' '+c.name);
+  populateSelect('calc-origin',COUNTRIES,'code',c=>cLabel(c));
+  populateSelect('calc-dest',COUNTRIES,'code',c=>cLabel(c));
   document.getElementById('calc-origin').value='CN';
   document.getElementById('calc-dest').value='US';
-  populateSelect('risk-origin',COUNTRIES,'code',c=>(zh?'原产：':'Origin: ')+c.flag+' '+c.name);
-  populateSelect('risk-dest',COUNTRIES,'code',c=>(zh?'目的：':'Dest: ')+c.flag+' '+c.name);
+  populateSelect('risk-origin',COUNTRIES,'code',c=>(zh?'Origin: ':'Origin: ')+cLabel(c));
+  populateSelect('risk-dest',COUNTRIES,'code',c=>(zh?'Dest: ':'Dest: ')+cLabel(c));
   document.getElementById('risk-origin').value='CN';
   document.getElementById('risk-dest').value='US';
 
   // Logistics selects
-  populateSelect('log-origin',COUNTRIES,'code',c=>c.flag+' '+c.name);
-  populateSelect('log-dest',COUNTRIES,'code',c=>c.flag+' '+c.name);
+  populateSelect('log-origin',COUNTRIES,'code',c=>cLabel(c));
+  populateSelect('log-dest',COUNTRIES,'code',c=>cLabel(c));
   document.getElementById('log-origin').value='CN';
   document.getElementById('log-dest').value='US';
 
@@ -2034,7 +2035,7 @@ async function initNews(){
   renderNews();
   // Then fetch live data from RSS feeds
   document.getElementById('news-list').insertAdjacentHTML('afterbegin',
-    '<div id="news-loading-bar" class="alert alert-info mb-3"><span class="spinner" style="border-color:rgba(37,99,235,.3);border-top-color:var(--primary)"></span> 正在从 WTO / UNCTAD / BBC / CNBC 实时抓取全球贸易资讯...</div>');
+    `<div id="news-loading-bar" class="alert alert-info mb-3"><span class="spinner" style="border-color:rgba(37,99,235,.3);border-top-color:var(--primary)"></span> ${currentLang==='zh'?'正在从 WTO / UNCTAD / BBC / CNBC 实时抓取全球贸易资讯...':'Fetching live trade news from WTO / UNCTAD / BBC / CNBC...'}</div>`);
   try {
     const live = await fetchLiveNews();
     if (live.length > 0) {
@@ -2053,7 +2054,9 @@ async function initNews(){
   const srcCount = new Set(allNewsData.map(n=>n.source)).size;
   const newsHeader = document.querySelector('#news .module-title p');
   if (newsHeader && allNewsData !== NEWS_DB) {
-    newsHeader.textContent = `实时RSS聚合 · ${srcCount}个数据源 · ${allNewsData.length}条资讯 · 更新于 ${new Date().toLocaleTimeString('zh-CN')}`;
+    newsHeader.textContent = currentLang==='zh'
+      ? `实时RSS聚合 · ${srcCount}个数据源 · ${allNewsData.length}条资讯 · 更新于 ${new Date().toLocaleTimeString('zh-CN')}`
+      : `Live RSS · ${srcCount} sources · ${allNewsData.length} articles · Updated ${new Date().toLocaleTimeString('en-US')}`;
   }
 }
 
@@ -2077,9 +2080,9 @@ function renderNews(){
       </div>
       <h3 class="font-bold mb-1">${n.title}</h3>
       <p class="text-sm text-muted">${n.summary}</p>
-      <p class="text-xs text-primary mt-2">→ 阅读原文</p>
+      <p class="text-xs text-primary mt-2">→ ${currentLang==='zh'?'阅读原文':'Read full article'}</p>
     </a>
-  `).join('')+(items.length===0?'<p class="text-center text-muted" style="padding:3rem">未匹配到相关资讯</p>':'');
+  `).join('')+(items.length===0?`<p class="text-center text-muted" style="padding:3rem">${currentLang==='zh'?'未匹配到相关资讯':'No matching news found'}</p>`:'');
   const pag=document.getElementById('news-paginate');
   if(totalPages>1){pag.style.display='flex';document.getElementById('news-page').textContent=`${newsPage+1} / ${totalPages}`;document.getElementById('news-prev').disabled=newsPage===0;document.getElementById('news-next').disabled=newsPage>=totalPages-1;}
   else{pag.style.display='none';}
@@ -2092,7 +2095,7 @@ function changePage(d){
 }
 
 // ===================== I18N SYSTEM =====================
-let currentLang = 'zh';
+let currentLang = 'en';
 const I18N = {
   zh: {
     'hero.title': '全球关务 · <span>智能决策</span> · 一站解决',
@@ -2124,8 +2127,11 @@ const I18N = {
     'ex.title': '实时金融汇率引擎', 'ex.sub': 'Frankfurter API · 历史走势缓存 · 多币种自动折算',
     'ex.swap': '⇅ 互换', 'ex.live': '实时汇率表', 'ex.hist': '历史走势图',
     'ex.cur': '货币', 'ex.rate': '汇率(CNY)', 'ex.update': '更新',
+    'news.title': '全球贸易实况', 'news.sub': '关税·国际事务专题聚合 · WTO/UNCTAD/PIIE/BBC/CNBC 实时抓取 · 贸易关键词过滤',
+    'news.prev': '上一页', 'news.next': '下一页',
+    'cls.examples': '快速示例：', 'cls.hint': '请输入商品信息后点击"智能归类"',
     'disclaimer': '<strong>免责声明：</strong>本平台所有计算结果、汇率数据及资讯摘要仅供参考，不构成法律或商业建议。实际关税以海关最终判定为准。',
-    'footer.copy': '© 2026 TradePilot V6 · 全球贸易决策平台',
+    'footer.copy': '© 2026 TradePilot · 全球贸易决策平台',
     'footer.data': '数据：UN Comtrade（HS归类）· 世界银行（关税指标）· WTO/UNCTAD/BBC/CNBC RSS（资讯）· Frankfurter（汇率）· 17track（物流）',
   },
   en: {
@@ -2158,8 +2164,11 @@ const I18N = {
     'ex.title': 'Live FX Rate Engine', 'ex.sub': 'Frankfurter API · Historical Trends · Multi-currency Conversion',
     'ex.swap': '⇅ Swap', 'ex.live': 'Live Rates', 'ex.hist': 'Historical Chart',
     'ex.cur': 'Currency', 'ex.rate': 'Rate (CNY)', 'ex.update': 'Update',
+    'news.title': 'Global Trade Live', 'news.sub': 'Tariff & Intl. Affairs Aggregation · WTO/UNCTAD/PIIE/BBC/CNBC Live RSS · Trade Keyword Filter',
+    'news.prev': 'Prev', 'news.next': 'Next',
+    'cls.examples': 'Quick examples:', 'cls.hint': 'Enter product info and click "Classify"',
     'disclaimer': '<strong>Disclaimer:</strong> All calculations, FX data, and news summaries are for reference only. They do not constitute legal or commercial advice. Actual duties are subject to customs determination.',
-    'footer.copy': '© 2026 TradePilot V6 · Global Trade Decision Platform',
+    'footer.copy': '© 2026 TradePilot · Global Trade Decision Platform',
     'footer.data': 'Data: UN Comtrade (HS) · World Bank (Tariffs) · WTO/UNCTAD/BBC/CNBC RSS (News) · Frankfurter (FX) · 17track (Logistics)',
   }
 };
@@ -2206,10 +2215,18 @@ function applyLang() {
     if (m.attr === 'placeholder') el.placeholder = val;
     else el.textContent = val;
   });
+  // Re-populate country selects with correct language
+  const selIds = ['calc-origin','calc-dest','log-origin','log-dest','batch-origin','batch-dest'];
+  selIds.forEach(id => { const sel=document.getElementById(id); if(!sel)return; const v=sel.value; populateSelect(id,COUNTRIES,'code',c=>cLabel(c)); sel.value=v; });
+  const riskO=document.getElementById('risk-origin'), riskD=document.getElementById('risk-dest');
+  if(riskO){const v=riskO.value; populateSelect('risk-origin',COUNTRIES,'code',c=>'Origin: '+cLabel(c)); riskO.value=v;}
+  if(riskD){const v=riskD.value; populateSelect('risk-dest',COUNTRIES,'code',c=>'Dest: '+cLabel(c)); riskD.value=v;}
   // Re-render dynamic content that uses language
   if (batchResults.length > 0) { renderBatchTable(); renderBatchSummary(); }
   // Re-check API status badges
   if (apiStatus.comtrade !== null) showAPIStatus();
+  // Re-render news if loaded
+  if (allNewsData && allNewsData.length > 0) renderNews();
 }
 
 // ===================== API CONNECTION CHECKER =====================
@@ -2491,8 +2508,8 @@ function exportBatchResults() {
 document.addEventListener('DOMContentLoaded', function(){
   init();
   // Populate batch selects
-  populateSelect('batch-origin', COUNTRIES, 'code', c => c.flag + ' ' + c.name);
-  populateSelect('batch-dest', COUNTRIES, 'code', c => c.flag + ' ' + c.name);
+  populateSelect('batch-origin', COUNTRIES, 'code', c => cLabel(c));
+  populateSelect('batch-dest', COUNTRIES, 'code', c => cLabel(c));
   document.getElementById('batch-origin').value = 'CN';
   document.getElementById('batch-dest').value = 'US';
   // Check API connections in background
@@ -2500,5 +2517,6 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
