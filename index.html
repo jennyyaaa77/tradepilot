@@ -329,7 +329,7 @@
       <textarea rows="5" id="classify-text" placeholder="e.g.: Apple iPhone 15 Pro titanium 6.7-inch OLED smartphone"></textarea>
       <div class="flex gap-3 mt-3 items-center">
         <select id="classify-top"><option value="3">Top 3</option><option value="5" selected>Top 5</option><option value="10">Top 10</option></select>
-        <button class="btn" onclick="classify()">智能归类</button>
+        <button class="btn" onclick="classify()">Classify</button>
       </div>
       <div class="flex flex-wrap gap-2 mt-3 text-xs text-muted items-center">
         <span data-t="cls.examples">Quick examples:</span>
@@ -360,7 +360,7 @@
     <input type="text" id="risk-hs" placeholder="HS Code *">
     <select id="risk-origin"></select>
     <select id="risk-dest"></select>
-    <button class="btn btn-danger" onclick="checkRisk()">全面检查</button>
+    <button class="btn btn-danger" onclick="checkRisk()">Full Check</button>
   </div>
   <div id="risk-result"></div>
 </section>
@@ -510,7 +510,7 @@
   </div>
   <div class="flex gap-2 flex-wrap">
     <input type="text" id="track-num" placeholder="Enter tracking number (DHL/FedEx/EMS/SF/...)" class="flex-1">
-    <button class="btn" id="track-btn" onclick="trackPackage()">追踪</button>
+    <button class="btn" id="track-btn" onclick="trackPackage()">Track</button>
   </div>
   <div id="track-error"></div>
   <div id="track-result" class="mt-3 max-h-80 space-y-2"></div>
@@ -595,67 +595,67 @@
 <script>
 // ===================== DATA =====================
 const HS_DB = [
-  { hs:'85171200', name:'智能手机', duty:0.0, vat:0.13, cons:0.0 },
-  { hs:'84713000', name:'笔记本电脑', duty:0.0, vat:0.13, cons:0.0 },
-  { hs:'85423100', name:'集成电路芯片', duty:0.0, vat:0.13, cons:0.0, restricted:true, reason:'两用物项管制', license:'两用物项和技术进口许可证' },
-  { hs:'22089090', name:'威士忌酒', duty:0.1, vat:0.13, cons:0.2 },
-  { hs:'33049900', name:'化妆品', duty:0.05, vat:0.13, cons:0.15 },
-  { hs:'62052000', name:'男式棉衬衫', duty:0.1, vat:0.13, cons:0.0 },
-  { hs:'64031900', name:'皮制运动鞋', duty:0.08, vat:0.13, cons:0.0 },
-  { hs:'85182100', name:'蓝牙耳机', duty:0.0, vat:0.13, cons:0.0 },
-  { hs:'91021100', name:'电子手表', duty:0.05, vat:0.13, cons:0.2 },
-  { hs:'22042100', name:'红葡萄酒', duty:0.14, vat:0.13, cons:0.1 },
+  { hs:'85171200', name:'Smartphone', nameZh:'智能手机', duty:0.0, vat:0.13, cons:0.0 },
+  { hs:'84713000', name:'Laptop', nameZh:'笔记本电脑', duty:0.0, vat:0.13, cons:0.0 },
+  { hs:'85423100', name:'IC Chips', nameZh:'集成电路芯片', duty:0.0, vat:0.13, cons:0.0, restricted:true, reason:'Dual-use item control', zhReason:'两用物项管制', license:'Dual-use Items and Technologies Import License', zhLicense:'两用物项和技术进口许可证' },
+  { hs:'22089090', name:'Whisky', nameZh:'威士忌酒', duty:0.1, vat:0.13, cons:0.2 },
+  { hs:'33049900', name:'Cosmetics', nameZh:'化妆品', duty:0.05, vat:0.13, cons:0.15 },
+  { hs:'62052000', name:"Men's Cotton Shirt", nameZh:'男式棉衬衫', duty:0.1, vat:0.13, cons:0.0 },
+  { hs:'64031900', name:'Leather Sports Shoes', nameZh:'皮制运动鞋', duty:0.08, vat:0.13, cons:0.0 },
+  { hs:'85182100', name:'Bluetooth Headset', nameZh:'蓝牙耳机', duty:0.0, vat:0.13, cons:0.0 },
+  { hs:'91021100', name:'Digital Watch', nameZh:'电子手表', duty:0.05, vat:0.13, cons:0.2 },
+  { hs:'22042100', name:'Red Wine', nameZh:'红葡萄酒', duty:0.14, vat:0.13, cons:0.1 },
 ];
 const FTA_DB = {
   // RCEP (15 members) - any pair
-  'CN_JP':{name:'RCEP',reduction:-0.03,cert:'RCEP原产地证书 (Form RCEP)'},
-  'CN_KR':{name:'中韩FTA / RCEP',reduction:-0.06,cert:'中韩FTA原产地证书 / RCEP证书'},
-  'CN_AU':{name:'中澳FTA / RCEP',reduction:-0.05,cert:'中澳FTA原产地证书 / RCEP证书'},
-  'CN_NZ':{name:'中新FTA / RCEP',reduction:-0.05,cert:'中新FTA原产地证书 / RCEP证书'},
-  'CN_VN':{name:'中国-东盟FTA / RCEP',reduction:-0.05,cert:'FORM E原产地证书 / RCEP证书'},
-  'CN_TH':{name:'中国-东盟FTA / RCEP',reduction:-0.05,cert:'FORM E原产地证书'},
-  'CN_MY':{name:'中国-东盟FTA / RCEP',reduction:-0.05,cert:'FORM E原产地证书'},
-  'CN_SG':{name:'中国-新加坡FTA / RCEP',reduction:-0.04,cert:'中国-新加坡FTA证书'},
-  'CN_ID':{name:'中国-东盟FTA / RCEP',reduction:-0.04,cert:'FORM E原产地证书'},
-  'CN_PH':{name:'中国-东盟FTA / RCEP',reduction:-0.04,cert:'FORM E原产地证书'},
-  'JP_VN':{name:'日越EPA / RCEP',reduction:-0.04,cert:'日越EPA / RCEP原产地证书'},
-  'JP_AU':{name:'JAEPA / RCEP',reduction:-0.03,cert:'JAEPA / RCEP原产地证书'},
-  'JP_TH':{name:'JTEPA / RCEP',reduction:-0.03,cert:'JTEPA / RCEP原产地证书'},
-  'KR_VN':{name:'韩国-东盟FTA / RCEP',reduction:-0.04,cert:'韩国-东盟FTA / RCEP证书'},
-  'AU_NZ':{name:'ANZCERTA',reduction:-0.08,cert:'ANZCERTA原产地证书'},
+  'CN_JP':{name:'RCEP',reduction:-0.03,cert:'RCEP Certificate of Origin (Form RCEP)'},
+  'CN_KR':{name:'China-Korea FTA / RCEP',reduction:-0.06,cert:'China-Korea FTA Certificate of Origin / RCEP Certificate'},
+  'CN_AU':{name:'China-Australia FTA / RCEP',reduction:-0.05,cert:'China-Australia FTA C/O / RCEP Certificate'},
+  'CN_NZ':{name:'China-NZ FTA / RCEP',reduction:-0.05,cert:'China-NZ FTA Certificate of Origin / RCEP Certificate'},
+  'CN_VN':{name:'China-ASEAN FTA / RCEP',reduction:-0.05,cert:'FORM E Certificate of Origin / RCEP Certificate'},
+  'CN_TH':{name:'China-ASEAN FTA / RCEP',reduction:-0.05,cert:'FORM E Certificate of Origin'},
+  'CN_MY':{name:'China-ASEAN FTA / RCEP',reduction:-0.05,cert:'FORM E Certificate of Origin'},
+  'CN_SG':{name:'China-Singapore FTA / RCEP',reduction:-0.04,cert:'China-Singapore FTA Certificate'},
+  'CN_ID':{name:'China-ASEAN FTA / RCEP',reduction:-0.04,cert:'FORM E Certificate of Origin'},
+  'CN_PH':{name:'China-ASEAN FTA / RCEP',reduction:-0.04,cert:'FORM E Certificate of Origin'},
+  'JP_VN':{name:'Japan-Vietnam EPA / RCEP',reduction:-0.04,cert:'Japan-Vietnam EPA / RCEP Certificate of Origin'},
+  'JP_AU':{name:'JAEPA / RCEP',reduction:-0.03,cert:'JAEPA / RCEP Certificate of Origin'},
+  'JP_TH':{name:'JTEPA / RCEP',reduction:-0.03,cert:'JTEPA / RCEP Certificate of Origin'},
+  'KR_VN':{name:'Korea-ASEAN FTA / RCEP',reduction:-0.04,cert:'Korea-ASEAN FTA / RCEP Certificate'},
+  'AU_NZ':{name:'ANZCERTA',reduction:-0.08,cert:'ANZCERTA Certificate of Origin'},
   // CPTPP
-  'JP_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP原产地证书'},
-  'JP_MX':{name:'CPTPP / 日墨EPA',reduction:-0.03,cert:'CPTPP / EPA原产地证书'},
-  'VN_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP原产地证书'},
-  'AU_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP原产地证书'},
-  'MY_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP原产地证书'},
-  'SG_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP原产地证书'},
+  'JP_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP Certificate of Origin'},
+  'JP_MX':{name:'CPTPP / Japan-Mexico EPA',reduction:-0.03,cert:'CPTPP / EPA Certificate of Origin'},
+  'VN_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP Certificate of Origin'},
+  'AU_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP Certificate of Origin'},
+  'MY_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP Certificate of Origin'},
+  'SG_CA':{name:'CPTPP',reduction:-0.03,cert:'CPTPP Certificate of Origin'},
   // USMCA
-  'US_CA':{name:'USMCA',reduction:-0.04,cert:'USMCA原产地证书'},
-  'US_MX':{name:'USMCA',reduction:-0.04,cert:'USMCA原产地证书'},
-  'CA_MX':{name:'USMCA',reduction:-0.04,cert:'USMCA原产地证书'},
+  'US_CA':{name:'USMCA',reduction:-0.04,cert:'USMCA Certificate of Origin'},
+  'US_MX':{name:'USMCA',reduction:-0.04,cert:'USMCA Certificate of Origin'},
+  'CA_MX':{name:'USMCA',reduction:-0.04,cert:'USMCA Certificate of Origin'},
   // EU internal (single market, zero tariff)
-  'DE_FR':{name:'EU单一市场',reduction:-1.0,cert:'EU内部流通无需证书'},
-  'DE_IT':{name:'EU单一市场',reduction:-1.0,cert:'EU内部流通无需证书'},
-  'FR_IT':{name:'EU单一市场',reduction:-1.0,cert:'EU内部流通无需证书'},
+  'DE_FR':{name:'EU Single Market',reduction:-1.0,cert:'EU Internal Market - No Certificate Required'},
+  'DE_IT':{name:'EU Single Market',reduction:-1.0,cert:'EU Internal Market - No Certificate Required'},
+  'FR_IT':{name:'EU Single Market',reduction:-1.0,cert:'EU Internal Market - No Certificate Required'},
   // EU FTAs
-  'DE_KR':{name:'EU-韩国FTA',reduction:-0.04,cert:'EUR.1原产地证书'},
-  'DE_JP':{name:'EU-日本EPA',reduction:-0.03,cert:'EU-Japan EPA自主声明'},
-  'DE_VN':{name:'EU-越南FTA (EVFTA)',reduction:-0.04,cert:'EUR.1 / REX自主声明'},
-  'DE_SG':{name:'EU-新加坡FTA',reduction:-0.03,cert:'EUR.1原产地证书'},
-  'DE_CA':{name:'CETA (EU-加拿大)',reduction:-0.03,cert:'CETA原产地声明'},
-  'GB_AU':{name:'UK-澳大利亚FTA',reduction:-0.03,cert:'UK-AU FTA原产地声明'},
-  'GB_NZ':{name:'UK-新西兰FTA',reduction:-0.03,cert:'UK-NZ FTA原产地声明'},
-  'GB_JP':{name:'UK-日本CEPA',reduction:-0.03,cert:'UK-Japan CEPA证书'},
+  'DE_KR':{name:'EU-Korea FTA',reduction:-0.04,cert:'EUR.1 Certificate of Origin'},
+  'DE_JP':{name:'EU-Japan EPA',reduction:-0.03,cert:'EU-Japan EPA Self-Declaration'},
+  'DE_VN':{name:'EU-Vietnam FTA (EVFTA)',reduction:-0.04,cert:'EUR.1 / REX Self-Declaration'},
+  'DE_SG':{name:'EU-Singapore FTA',reduction:-0.03,cert:'EUR.1 Certificate of Origin'},
+  'DE_CA':{name:'CETA (EU-Canada)',reduction:-0.03,cert:'CETA Origin Declaration'},
+  'GB_AU':{name:'UK-Australia FTA',reduction:-0.03,cert:'UK-AU FTA Origin Declaration'},
+  'GB_NZ':{name:'UK-New Zealand FTA',reduction:-0.03,cert:'UK-NZ FTA Origin Declaration'},
+  'GB_JP':{name:'UK-Japan CEPA',reduction:-0.03,cert:'UK-Japan CEPA Certificate'},
   // China bilateral
-  'CN_CA':{name:'RCEP候选 / WTO MFN',reduction:0,cert:'一般原产地证书 (CO)'},
+  'CN_CA':{name:'RCEP Candidate / WTO MFN',reduction:0,cert:'General Certificate of Origin (CO)'},
   // India
-  'IN_SG':{name:'印度-新加坡CECA',reduction:-0.03,cert:'CECA原产地证书'},
-  'IN_KR':{name:'印度-韩国CEPA',reduction:-0.03,cert:'CEPA原产地证书'},
-  'IN_JP':{name:'印度-日本CEPA',reduction:-0.03,cert:'CEPA原产地证书'},
+  'IN_SG':{name:'India-Singapore CECA',reduction:-0.03,cert:'CECA Certificate of Origin'},
+  'IN_KR':{name:'India-Korea CEPA',reduction:-0.03,cert:'CEPA Certificate of Origin'},
+  'IN_JP':{name:'India-Japan CEPA',reduction:-0.03,cert:'CEPA Certificate of Origin'},
   // Middle East
-  'CN_AE':{name:'中国-海合会FTA(谈判中)',reduction:0,cert:'一般原产地证书 (CO)'},
-  'CN_SA':{name:'中国-海合会FTA(谈判中)',reduction:0,cert:'一般原产地证书 (CO)'},
+  'CN_AE':{name:'China-GCC FTA (Under Negotiation)',reduction:0,cert:'General Certificate of Origin (CO)'},
+  'CN_SA':{name:'China-GCC FTA (Under Negotiation)',reduction:0,cert:'General Certificate of Origin (CO)'},
 };
 const COUNTRIES = [
   {code:'CN',flag:'🇨🇳',name:'China',zh:'中国'},{code:'US',flag:'🇺🇸',name:'USA',zh:'美国'},{code:'JP',flag:'🇯🇵',name:'Japan',zh:'日本'},{code:'KR',flag:'🇰🇷',name:'South Korea',zh:'韩国'},
@@ -670,33 +670,33 @@ const COUNTRIES = [
 function cLabel(c){ const n = currentLang==='zh' ? c.zh : c.name; return c.flag+' '+c.code+' '+n; }
 const CURRENCIES = ['CNY','USD','EUR','GBP','JPY','KRW','AUD'];
 const PORTS = [
-  {code:'SHA',name:'上海',lat:31.23,lon:121.47},{code:'SZX',name:'深圳',lat:22.54,lon:114.05},
-  {code:'NGB',name:'宁波',lat:29.86,lon:121.55},{code:'TAO',name:'青岛',lat:36.06,lon:120.38},
-  {code:'LAX',name:'洛杉矶',lat:33.74,lon:-118.27},{code:'HAM',name:'汉堡',lat:53.55,lon:9.99},
-  {code:'TYO',name:'东京',lat:35.65,lon:139.84},{code:'SEL',name:'首尔/釜山',lat:35.18,lon:129.07},
+  {code:'SHA',name:'Shanghai',lat:31.23,lon:121.47},{code:'SZX',name:'Shenzhen',lat:22.54,lon:114.05},
+  {code:'NGB',name:'Ningbo',lat:29.86,lon:121.55},{code:'TAO',name:'Qingdao',lat:36.06,lon:120.38},
+  {code:'LAX',name:'Los Angeles',lat:33.74,lon:-118.27},{code:'HAM',name:'Hamburg',lat:53.55,lon:9.99},
+  {code:'TYO',name:'Tokyo',lat:35.65,lon:139.84},{code:'SEL',name:'Seoul/Busan',lat:35.18,lon:129.07},
 ];
 const NEWS_DB = [
-  {title:'美国对中国301关税复审：部分电子产品加征25%额外关税',source:'路透社',time:'2小时前',tag:'urgent',category:'Tariff Alert',url:'https://www.reuters.com/world/china/',summary:'USTR 完成对华 301 条款四年期复审，对部分电子产品维持并加征 25% 额外关税。涉及智能手机零部件、半导体设备等品类，预计 60 天内执行。'},
-  {title:'RCEP对印度尼西亚正式生效，中日韩东盟贸易壁垒进一步削减',source:'新华社',time:'5小时前',tag:'trade',category:'Trade Agreement',url:'http://www.xinhuanet.com/english/',summary:'RCEP 对印尼正式生效，区域内 90% 以上货物贸易最终实现零关税。建议申报时核对 RCEP 原产地证书 (Form RCEP) 享受优惠税率。'},
-  {title:'欧盟碳边境调节机制(CBAM)过渡期实施细则更新解读',source:'欧盟委员会',time:'8小时前',tag:'policy',category:'Policy',url:'https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en',summary:'CBAM 过渡期申报细则正式更新，钢铁、水泥、铝、化肥、电力、氢气六大行业进口商须按季度提交隐含碳排放数据。2026 年 1 月起进入征税阶段。'},
-  {title:'美国OFAC更新SDN制裁名单，新增6家中国科技企业',source:'OFAC官网',time:'12小时前',tag:'sanction',category:'Sanctions',url:'https://ofac.treasury.gov/sanctions-list-search-tool',summary:'OFAC 最新一轮 SDN 名单新增 6 家中国科技企业，主要涉及 AI 芯片与无人机供应链。第三方与其交易亦可能触发次级制裁。'},
-  {title:'中国海关总署2024年第15号公告：调整部分商品监管条件',source:'海关总署',time:'1天前',tag:'policy',category:'Policy',url:'http://www.customs.gov.cn/',summary:'海关总署调整部分 HS 商品监管条件代码，涉及医疗器械、化学品、动植物制品共 142 项。新增 CCC 认证、入境检疫等要求。'},
-  {title:'全球集装箱运价SCFI连续三周上涨，美西线涨幅超10%',source:'上海航交所',time:'1天前',tag:'trade',category:'Trade Agreement',url:'https://en.sse.net.cn/indices/scfinew.jsp',summary:'SCFI 综合指数报 2150 点，环比上涨 5.2%。美西航线 40HQ 运价涨破 4500 美元，建议尽早锁舱或采用 LCL 拼箱降低成本。'},
-  {title:'日本经济产业省拟修订出口管制清单，先进半导体设备列入审查',source:'日经新闻',time:'2天前',tag:'sanction',category:'Sanctions',url:'https://asia.nikkei.com/Business/Tech/Semiconductors',summary:'METI 拟将 23 类先进半导体制造设备纳入出口许可管理，预计 2025 年 Q1 实施，企业应提前梳理订单交付计划。'},
-  {title:'英国UKCA标志过渡期延长至2025年底，CE标志继续接受',source:'英国政府',time:'2天前',tag:'policy',category:'Policy',url:'https://www.gov.uk/guidance/using-the-ukca-marking',summary:'英国商业贸易部宣布 UKCA 强制实施日期延后至 2025 年 12 月 31 日，期间 CE 标志的产品仍可在英国市场流通。'},
-  {title:'越南对华铝型材反倾销调查终裁：税率2.1%至35.5%不等',source:'越南工贸部',time:'3天前',tag:'urgent',category:'Tariff Alert',url:'https://moit.gov.vn/',summary:'越南工贸部公布对华铝型材反倾销终裁结果，5 家应诉企业税率为 2.1%-12.4%，其余出口商统一适用 35.5% 高税率。'},
-  {title:'中欧班列2024年开行量突破1万列，同比增长12%创历史新高',source:'中国铁路',time:'3天前',tag:'trade',category:'Trade Agreement',url:'http://www.china-railway.com.cn/',summary:'中欧班列累计开行 10243 列，发送货物 109.5 万 TEU。新增义乌-马德里、西安-杜伊斯堡等多条精品线路。'},
+  {title:'US Section 301 Tariff Review on China: 25% Additional Tariff on Select Electronics',source:'Reuters',time:'2 hours ago',tag:'urgent',category:'Tariff Alert',url:'https://www.reuters.com/world/china/',summary:'USTR completes 4-year review of Section 301 tariffs on China, maintaining and adding 25% surcharge on select electronics including smartphone components and semiconductor equipment. Expected to take effect within 60 days.'},
+  {title:'RCEP Officially Takes Effect for Indonesia, Further Reducing Trade Barriers',source:'Xinhua',time:'5 hours ago',tag:'trade',category:'Trade Agreement',url:'http://www.xinhuanet.com/english/',summary:'RCEP takes effect for Indonesia, with over 90% of goods trade in the region ultimately achieving zero tariffs. Recommend verifying RCEP Certificate of Origin (Form RCEP) for preferential rates.'},
+  {title:'EU CBAM Transitional Period Implementation Rules Updated',source:'EU Commission',time:'8 hours ago',tag:'policy',category:'Policy',url:'https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en',summary:'CBAM transitional reporting rules officially updated. Importers in steel, cement, aluminium, fertilizer, electricity, and hydrogen sectors must submit quarterly embedded carbon emissions data. Levy phase begins January 2026.'},
+  {title:'US OFAC Updates SDN Sanctions List, Adds 6 Chinese Tech Companies',source:'OFAC',time:'12 hours ago',tag:'sanction',category:'Sanctions',url:'https://ofac.treasury.gov/sanctions-list-search-tool',summary:'Latest OFAC SDN list adds 6 Chinese tech companies, primarily in AI chip and drone supply chains. Third-party transactions may also trigger secondary sanctions.'},
+  {title:'China Customs GAC Announcement No.15: Adjusted Regulatory Requirements for Select Goods',source:'GAC China',time:'1 day ago',tag:'policy',category:'Policy',url:'http://www.customs.gov.cn/',summary:'GAC adjusts HS commodity regulatory codes for 142 items covering medical devices, chemicals, and animal/plant products. New CCC certification and quarantine requirements added.'},
+  {title:'Global Container Freight Index SCFI Rises for Third Consecutive Week, US West Coast Up 10%+',source:'Shanghai Shipping Exchange',time:'1 day ago',tag:'trade',category:'Trade Agreement',url:'https://en.sse.net.cn/indices/scfinew.jsp',summary:'SCFI composite index at 2150 points, up 5.2% week-over-week. US West Coast 40HQ rates exceed $4,500. Recommend early booking or LCL consolidation to reduce costs.'},
+  {title:'Japan METI Plans to Revise Export Control List, Advanced Semiconductor Equipment Under Review',source:'Nikkei',time:'2 days ago',tag:'sanction',category:'Sanctions',url:'https://asia.nikkei.com/Business/Tech/Semiconductors',summary:'METI plans to add 23 categories of advanced semiconductor manufacturing equipment to export license controls, expected Q1 2025 implementation. Companies should review order fulfillment plans.'},
+  {title:'UK UKCA Marking Transition Extended to End of 2025, CE Marking Still Accepted',source:'UK Government',time:'2 days ago',tag:'policy',category:'Policy',url:'https://www.gov.uk/guidance/using-the-ukca-marking',summary:'UK Department for Business and Trade extends UKCA mandatory enforcement to December 31, 2025. CE-marked products continue to be accepted on the UK market during this period.'},
+  {title:'Vietnam Final Ruling on Anti-Dumping of Chinese Aluminium Profiles: Duties 2.1%-35.5%',source:'Vietnam MOIT',time:'3 days ago',tag:'urgent',category:'Tariff Alert',url:'https://moit.gov.vn/',summary:'Vietnam MOIT announces final anti-dumping ruling on Chinese aluminium profiles. 5 responding companies receive 2.1%-12.4% duties; all other exporters face 35.5% rate.'},
+  {title:'China-Europe Railway Express Exceeds 10,000 Trips in 2024, Up 12% YoY',source:'China Railway',time:'3 days ago',tag:'trade',category:'Trade Agreement',url:'http://www.china-railway.com.cn/',summary:'China-Europe Railway Express reaches 10,243 trips, shipping 1.095 million TEU. New premium routes added including Yiwu-Madrid and Xian-Duisburg.'},
 ];
 const CODE_DESC = {
-  0:'晴',1:'多云',2:'局部多云',3:'阴',45:'雾',48:'雾凇',51:'小毛雨',53:'毛雨',55:'强毛雨',
-  61:'小雨',63:'中雨',65:'大雨',71:'小雪',73:'中雪',75:'大雪',80:'阵雨',95:'雷暴',
+  0:'Clear',1:'Cloudy',2:'Partly Cloudy',3:'Overcast',45:'Fog',48:'Rime Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',
+  61:'Light Rain',63:'Moderate Rain',65:'Heavy Rain',71:'Light Snow',73:'Moderate Snow',75:'Heavy Snow',80:'Showers',95:'Thunderstorm',
 };
 const LABEL_CN = {
-  'cellular telephone':'手机','laptop':'笔记本电脑','notebook':'笔记本电脑','desktop computer':'台式电脑',
-  'monitor':'显示器','keyboard':'键盘','mouse':'鼠标','printer':'打印机','camera':'相机',
-  'digital watch':'电子手表','wristwatch':'手表','sunglasses':'太阳镜','running shoe':'运动鞋',
-  'sneaker':'运动鞋','sandal':'凉鞋','backpack':'背包','wallet':'钱包','handbag':'手提包',
-  'water bottle':'水瓶','coffee mug':'马克杯','umbrella':'雨伞',
+  'cellular telephone':'Cellphone','laptop':'Laptop','notebook':'Laptop','desktop computer':'Desktop Computer',
+  'monitor':'Monitor','keyboard':'Keyboard','mouse':'Mouse','printer':'Printer','camera':'Camera',
+  'digital watch':'Digital Watch','wristwatch':'Wristwatch','sunglasses':'Sunglasses','running shoe':'Running Shoe',
+  'sneaker':'Sneaker','sandal':'Sandal','backpack':'Backpack','wallet':'Wallet','handbag':'Handbag',
+  'water bottle':'Water Bottle','coffee mug':'Coffee Mug','umbrella':'Umbrella',
 };
 
 // ===================== SUPABASE CONFIG =====================
@@ -792,73 +792,73 @@ let hsRefCache = null;
 let hsRefLoading = false;
 // Extended built-in HS database covering major 4-digit chapters
 const HS_EXTENDED = [
-  {id:'0101',text:'Live horses, asses, mules / 活马、驴、骡'},{id:'0201',text:'Meat of bovine animals, fresh / 鲜牛肉'},{id:'0301',text:'Live fish / 活鱼'},
-  {id:'0401',text:'Milk and cream / 鲜奶及奶油'},{id:'0701',text:'Potatoes / 马铃薯'},{id:'0801',text:'Coconuts, Brazil nuts / 椰子、巴西坚果'},
-  {id:'0901',text:'Coffee / 咖啡'},{id:'0902',text:'Tea / 茶叶'},{id:'1001',text:'Wheat / 小麦'},{id:'1006',text:'Rice / 稻米'},
-  {id:'1201',text:'Soybeans / 大豆'},{id:'1507',text:'Soybean oil / 豆油'},{id:'1701',text:'Cane or beet sugar / 蔗糖、甜菜糖'},
-  {id:'2009',text:'Fruit juices / 果汁'},{id:'2101',text:'Coffee extracts / 咖啡提取物'},{id:'2201',text:'Waters / 饮用水'},
-  {id:'2202',text:'Beverages, flavoured / 加味饮料'},{id:'2203',text:'Beer / 啤酒'},{id:'2204',text:'Wine / 葡萄酒'},
-  {id:'22042100',text:'Wine in containers ≤2L / 2升以下容器装葡萄酒'},{id:'22089090',text:'Spirits, liqueurs / 烈酒、利口酒'},
-  {id:'2402',text:'Cigars, cigarettes / 雪茄、卷烟'},{id:'2710',text:'Petroleum oils / 石油'},
-  {id:'2711',text:'Petroleum gases / 石油气'},{id:'2844',text:'Radioactive elements / 放射性元素'},
-  {id:'2917',text:'Polycarboxylic acids / 多元羧酸'},{id:'3003',text:'Medicaments (not in dosage) / 药品（未配定剂量）'},
-  {id:'3004',text:'Medicaments (in dosage) / 药品（已配定剂量）'},{id:'3204',text:'Synthetic dyes / 合成染料'},
-  {id:'3301',text:'Essential oils / 精油'},{id:'3304',text:'Beauty products / 美容化妆品'},
-  {id:'33049900',text:'Beauty/makeup preparations nes / 其他美容化妆品'},{id:'3401',text:'Soap / 肥皂'},
-  {id:'3808',text:'Insecticides, herbicides / 杀虫剂、除草剂'},{id:'3901',text:'Polymers of ethylene / 乙烯聚合物'},
-  {id:'3926',text:'Articles of plastics / 塑料制品'},{id:'4011',text:'New pneumatic tyres / 新充气轮胎'},
-  {id:'4202',text:'Trunks, suitcases, handbags / 箱包、手提包'},{id:'4403',text:'Wood in the rough / 原木'},
-  {id:'4802',text:'Paper and paperboard / 纸及纸板'},{id:'4901',text:'Printed books / 印刷书籍'},
-  {id:'5201',text:'Cotton, not carded / 未梳棉花'},{id:'5208',text:'Woven cotton fabrics / 棉机织物'},
-  {id:'5407',text:'Woven synthetic fabrics / 合成纤维机织物'},{id:'5516',text:'Woven artificial staple fabrics / 人造短纤机织物'},
-  {id:'6104',text:'Women\'s suits, knitted / 女式针织套装'},{id:'6109',text:'T-shirts, knitted / 针织T恤'},
-  {id:'6110',text:'Jerseys, pullovers, knitted / 针织套头衫'},{id:'6203',text:'Men\'s suits, woven / 男式机织套装'},
-  {id:'62052000',text:'Men\'s cotton shirts / 男式棉衬衫'},{id:'6204',text:'Women\'s suits, woven / 女式机织套装'},
-  {id:'6301',text:'Blankets / 毯子'},{id:'6403',text:'Footwear, leather upper / 皮面鞋靴'},
-  {id:'64031900',text:'Sports footwear, leather / 皮制运动鞋'},{id:'6802',text:'Worked stone / 加工石料'},
-  {id:'6907',text:'Ceramic tiles / 瓷砖'},{id:'7003',text:'Cast and rolled glass / 铸造及轧制玻璃'},
-  {id:'7013',text:'Glassware for table/kitchen / 餐厨玻璃器皿'},{id:'7106',text:'Silver / 银'},
-  {id:'7108',text:'Gold / 黄金'},{id:'7113',text:'Jewellery of precious metal / 贵金属首饰'},
-  {id:'7204',text:'Ferrous waste and scrap / 钢铁废碎料'},{id:'7208',text:'Hot-rolled steel / 热轧钢板'},
-  {id:'7210',text:'Coated flat-rolled steel / 镀层钢板'},{id:'7304',text:'Steel tubes, seamless / 无缝钢管'},
-  {id:'7601',text:'Unwrought aluminium / 未锻轧铝'},{id:'7604',text:'Aluminium bars and profiles / 铝型材'},
-  {id:'8407',text:'Spark-ignition engines / 点燃式发动机'},{id:'8408',text:'Compression-ignition engines / 柴油发动机'},
-  {id:'8413',text:'Pumps for liquids / 液体泵'},{id:'8414',text:'Air or gas compressors / 空气压缩机'},
-  {id:'8415',text:'Air conditioning machines / 空调'},{id:'8418',text:'Refrigerators, freezers / 冰箱、冷柜'},
-  {id:'8422',text:'Dish-washing machines / 洗碗机'},{id:'8428',text:'Lifting/handling machinery / 升降搬运机械'},
-  {id:'8429',text:'Bulldozers, excavators / 推土机、挖掘机'},{id:'8431',text:'Parts for machinery / 机械零件'},
-  {id:'8443',text:'Printing machinery / 印刷机械'},{id:'8450',text:'Washing machines / 洗衣机'},
-  {id:'8456',text:'Machine tools, laser/ultrasonic / 激光等加工机床'},{id:'8471',text:'Computers / 计算机'},
-  {id:'84713000',text:'Portable digital computers / 笔记本电脑'},{id:'8473',text:'Parts for computers / 计算机零件'},
-  {id:'8479',text:'Machines nes / 其他机器'},{id:'8481',text:'Taps, cocks, valves / 阀门'},
-  {id:'8501',text:'Electric motors and generators / 电动机和发电机'},{id:'8502',text:'Electric generating sets / 发电机组'},
-  {id:'8504',text:'Transformers / 变压器'},{id:'8507',text:'Electric accumulators / 蓄电池'},
-  {id:'8517',text:'Telephone sets, smartphones / 电话机、智能手机'},
-  {id:'85171200',text:'Smartphones / 智能手机'},{id:'8518',text:'Microphones, loudspeakers / 麦克风、扬声器'},
-  {id:'85182100',text:'Single loudspeakers / 蓝牙耳机/单扬声器'},{id:'8521',text:'Video recording apparatus / 录像设备'},
-  {id:'8523',text:'Discs, tapes, solid-state storage / 磁盘、磁带、固态存储'},
-  {id:'8525',text:'Transmission apparatus, cameras / 发射装置、摄像机'},
-  {id:'8528',text:'Monitors and projectors / 显示器和投影仪'},
-  {id:'8529',text:'Parts for TV/radio / 电视和无线电零件'},
-  {id:'8532',text:'Electrical capacitors / 电容器'},{id:'8534',text:'Printed circuits / 印刷电路'},
-  {id:'8536',text:'Electrical switches / 电气开关'},{id:'8541',text:'Semiconductor devices / 半导体器件'},
-  {id:'8542',text:'Electronic integrated circuits / 集成电路'},
-  {id:'85423100',text:'IC chips, processors / 集成电路芯片、处理器'},
-  {id:'8544',text:'Insulated wire and cable / 绝缘电线电缆'},
-  {id:'8703',text:'Motor cars / 小客车'},{id:'8704',text:'Motor vehicles for goods / 货运机动车辆'},
-  {id:'8708',text:'Parts for motor vehicles / 机动车辆零件'},
-  {id:'8711',text:'Motorcycles / 摩托车'},{id:'8714',text:'Parts for bicycles / 自行车零件'},
-  {id:'8802',text:'Aeroplanes, helicopters / 飞机、直升机'},
-  {id:'9001',text:'Optical fibres, lenses / 光导纤维、透镜'},
-  {id:'9013',text:'Lasers, liquid crystal devices / 激光器、液晶装置'},
-  {id:'9018',text:'Medical instruments / 医疗器械'},
-  {id:'9021',text:'Orthopaedic appliances / 矫形器具'},
-  {id:'91021100',text:'Electronic wristwatches / 电子手表'},
-  {id:'9102',text:'Wristwatches / 手表'},{id:'9401',text:'Seats / 座椅'},
-  {id:'9403',text:'Other furniture / 其他家具'},{id:'9405',text:'Lamps and lighting / 灯具及照明'},
-  {id:'9503',text:'Toys / 玩具'},{id:'9504',text:'Video game consoles / 电子游戏机'},
-  {id:'9506',text:'Gymnastics/athletics equipment / 体育器材'},
-  {id:'9603',text:'Brooms, brushes / 扫帚、刷子'},{id:'9701',text:'Paintings / 绘画'},
+  {id:'0101',text:'Live horses, asses, mules'},{id:'0201',text:'Meat of bovine animals, fresh'},{id:'0301',text:'Live fish'},
+  {id:'0401',text:'Milk and cream'},{id:'0701',text:'Potatoes'},{id:'0801',text:'Coconuts, Brazil nuts'},
+  {id:'0901',text:'Coffee'},{id:'0902',text:'Tea'},{id:'1001',text:'Wheat'},{id:'1006',text:'Rice'},
+  {id:'1201',text:'Soybeans'},{id:'1507',text:'Soybean oil'},{id:'1701',text:'Cane or beet sugar'},
+  {id:'2009',text:'Fruit juices'},{id:'2101',text:'Coffee extracts'},{id:'2201',text:'Waters'},
+  {id:'2202',text:'Beverages, flavoured'},{id:'2203',text:'Beer'},{id:'2204',text:'Wine'},
+  {id:'22042100',text:'Wine in containers ≤2L'},{id:'22089090',text:'Spirits, liqueurs'},
+  {id:'2402',text:'Cigars, cigarettes'},{id:'2710',text:'Petroleum oils'},
+  {id:'2711',text:'Petroleum gases'},{id:'2844',text:'Radioactive elements'},
+  {id:'2917',text:'Polycarboxylic acids'},{id:'3003',text:'Medicaments (not in dosage)'},
+  {id:'3004',text:'Medicaments (in dosage)'},{id:'3204',text:'Synthetic dyes'},
+  {id:'3301',text:'Essential oils'},{id:'3304',text:'Beauty products'},
+  {id:'33049900',text:'Beauty/makeup preparations nes'},{id:'3401',text:'Soap'},
+  {id:'3808',text:'Insecticides, herbicides'},{id:'3901',text:'Polymers of ethylene'},
+  {id:'3926',text:'Articles of plastics'},{id:'4011',text:'New pneumatic tyres'},
+  {id:'4202',text:'Trunks, suitcases, handbags'},{id:'4403',text:'Wood in the rough'},
+  {id:'4802',text:'Paper and paperboard'},{id:'4901',text:'Printed books'},
+  {id:'5201',text:'Cotton, not carded'},{id:'5208',text:'Woven cotton fabrics'},
+  {id:'5407',text:'Woven synthetic fabrics'},{id:'5516',text:'Woven artificial staple fabrics'},
+  {id:'6104',text:'Women\'s suits, knitted'},{id:'6109',text:'T-shirts, knitted'},
+  {id:'6110',text:'Jerseys, pullovers, knitted'},{id:'6203',text:'Men\'s suits, woven'},
+  {id:'62052000',text:'Men\'s cotton shirts'},{id:'6204',text:'Women\'s suits, woven'},
+  {id:'6301',text:'Blankets'},{id:'6403',text:'Footwear, leather upper'},
+  {id:'64031900',text:'Sports footwear, leather'},{id:'6802',text:'Worked stone'},
+  {id:'6907',text:'Ceramic tiles'},{id:'7003',text:'Cast and rolled glass'},
+  {id:'7013',text:'Glassware for table/kitchen'},{id:'7106',text:'Silver'},
+  {id:'7108',text:'Gold'},{id:'7113',text:'Jewellery of precious metal'},
+  {id:'7204',text:'Ferrous waste and scrap'},{id:'7208',text:'Hot-rolled steel'},
+  {id:'7210',text:'Coated flat-rolled steel'},{id:'7304',text:'Steel tubes, seamless'},
+  {id:'7601',text:'Unwrought aluminium'},{id:'7604',text:'Aluminium bars and profiles'},
+  {id:'8407',text:'Spark-ignition engines'},{id:'8408',text:'Compression-ignition engines'},
+  {id:'8413',text:'Pumps for liquids'},{id:'8414',text:'Air or gas compressors'},
+  {id:'8415',text:'Air conditioning machines'},{id:'8418',text:'Refrigerators, freezers'},
+  {id:'8422',text:'Dish-washing machines'},{id:'8428',text:'Lifting/handling machinery'},
+  {id:'8429',text:'Bulldozers, excavators'},{id:'8431',text:'Parts for machinery'},
+  {id:'8443',text:'Printing machinery'},{id:'8450',text:'Washing machines'},
+  {id:'8456',text:'Machine tools, laser/ultrasonic'},{id:'8471',text:'Computers'},
+  {id:'84713000',text:'Portable digital computers'},{id:'8473',text:'Parts for computers'},
+  {id:'8479',text:'Machines nes'},{id:'8481',text:'Taps, cocks, valves'},
+  {id:'8501',text:'Electric motors and generators'},{id:'8502',text:'Electric generating sets'},
+  {id:'8504',text:'Transformers'},{id:'8507',text:'Electric accumulators'},
+  {id:'8517',text:'Telephone sets, smartphones'},
+  {id:'85171200',text:'Smartphones'},{id:'8518',text:'Microphones, loudspeakers'},
+  {id:'85182100',text:'Single loudspeakers'},{id:'8521',text:'Video recording apparatus'},
+  {id:'8523',text:'Discs, tapes, solid-state storage'},
+  {id:'8525',text:'Transmission apparatus, cameras'},
+  {id:'8528',text:'Monitors and projectors'},
+  {id:'8529',text:'Parts for TV/radio'},
+  {id:'8532',text:'Electrical capacitors'},{id:'8534',text:'Printed circuits'},
+  {id:'8536',text:'Electrical switches'},{id:'8541',text:'Semiconductor devices'},
+  {id:'8542',text:'Electronic integrated circuits'},
+  {id:'85423100',text:'IC chips, processors'},
+  {id:'8544',text:'Insulated wire and cable'},
+  {id:'8703',text:'Motor cars'},{id:'8704',text:'Motor vehicles for goods'},
+  {id:'8708',text:'Parts for motor vehicles'},
+  {id:'8711',text:'Motorcycles'},{id:'8714',text:'Parts for bicycles'},
+  {id:'8802',text:'Aeroplanes, helicopters'},
+  {id:'9001',text:'Optical fibres, lenses'},
+  {id:'9013',text:'Lasers, liquid crystal devices'},
+  {id:'9018',text:'Medical instruments'},
+  {id:'9021',text:'Orthopaedic appliances'},
+  {id:'91021100',text:'Electronic wristwatches'},
+  {id:'9102',text:'Wristwatches'},{id:'9401',text:'Seats'},
+  {id:'9403',text:'Other furniture'},{id:'9405',text:'Lamps and lighting'},
+  {id:'9503',text:'Toys'},{id:'9504',text:'Video game consoles'},
+  {id:'9506',text:'Gymnastics/athletics equipment'},
+  {id:'9603',text:'Brooms, brushes'},{id:'9701',text:'Paintings'},
 ];
 
 async function loadHSReference() {
@@ -940,7 +940,7 @@ async function lookupHSCodeAPI(code) {
         vat: apiRes.vat_rate != null ? apiRes.vat_rate : 0.13,
         cons: apiRes.consumption_tax || 0,
         source: 'supabase-api',
-        note: apiRes.note || '数据来自云端关税API'
+        note: apiRes.note || 'Data from Cloud Tariff API'
       };
     }
   } catch(e) { console.warn('Supabase hs-lookup failed:', e.message); }
@@ -961,7 +961,7 @@ async function lookupHSCodeAPI(code) {
             // Try to get name from HS_EXTENDED
             const extMatch = HS_EXTENDED.find(h => clean.startsWith(h.id) || h.id.startsWith(clean.substring(0,4)));
             return { hs: clean, name: extMatch ? getHSText(extMatch) : 'HS '+clean, duty: witsRate, vat: 0.13, cons: 0, source: 'wits-api',
-              note: 'MFN加权平均关税率(TRAINS)，数据来自WITS世界银行' };
+              note: 'MFN weighted average tariff (TRAINS), data from WITS World Bank' };
           }
         }
       }
@@ -975,7 +975,7 @@ async function lookupHSCodeAPI(code) {
     if (!match && clean.length >= 4) match = ref.find(item => getHSId(item).startsWith(clean.substring(0, 4)));
     if (match) {
       return { hs: getHSId(match), name: getHSText(match), duty: 0.05, vat: 0.13, cons: 0, source: 'api',
-        note: '税率为WTO平均MFN参考估值，实际税率以各国海关核定为准' };
+        note: 'Rate is WTO average MFN reference estimate; actual rate subject to customs authority' };
     }
   }
   return null;
@@ -1241,7 +1241,7 @@ async function calculateTariff(){
   // Route info
   html += `<div class="alert alert-info" style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">`;
   html += `<strong>${originC?originC.flag:''} ${origin}</strong> → <strong>${destC?destC.flag:''} ${dest}</strong>`;
-  html += ` · ${item.name} (${item.hs})`;
+  html += ` · ${zh&&item.nameZh?item.nameZh:item.name} (${item.hs})`;
   html += ` · ${zh?'数据源':'Source'}: ${item.source==='api'?'UN Comtrade':item.source==='supabase-api'?'Cloud API':item.source==='wits-api'?'WITS/WTO':(zh?'本地精确库':'Local DB')}`;
   html += `</div>`;
   // FTA info
@@ -1307,7 +1307,7 @@ async function classify(){
     }
   } catch(e) { console.warn('AI classify failed:', e.message); }
   // 1. Local DB matches
-  const localResults=HS_DB.filter(i=>text.toLowerCase().includes(i.name.toLowerCase())||text.includes(i.hs)).map(r=>({...r, source:'local'}));
+  const localResults=HS_DB.filter(i=>text.toLowerCase().includes(i.name.toLowerCase())||(i.nameZh&&text.includes(i.nameZh))||text.includes(i.hs)).map(r=>({...r, name: zh&&r.nameZh?r.nameZh:r.name, source:'local'}));
   // 2. API matches from UN Comtrade HS reference
   let apiResults = [];
   try { apiResults = await searchHSByKeyword(text, topN + 5); } catch(e) {}
@@ -1339,79 +1339,79 @@ async function classify(){
 // Certificate & document requirements by destination country
 const CERT_REQUIREMENTS = {
   US: {
-    general: ['Commercial Invoice (商业发票)', 'Packing List (装箱单)', 'Bill of Lading (提单)', 'ISF 10+2 (进口安全申报)', 'CBP Form 7501 (海关申报单)'],
+    general: ['Commercial Invoice', 'Packing List', 'Bill of Lading', 'ISF 10+2 (Import Security Filing)', 'CBP Form 7501 (Entry Summary)'],
     chapters: {
-      '85': ['FCC认证 (电子设备)', 'UL安全认证 (建议)'],
-      '84': ['FCC认证 (含无线功能时)', 'UL认证 (电气安全)'],
-      '33': ['FDA注册 (化妆品)', 'CPSC合规声明 (消费品安全)'],
-      '30': ['FDA药品注册', 'NDC编码', 'FDA进口许可'],
-      '22': ['TTB进口许可 (酒精饮料)', 'FDA食品设施注册', 'COLA标签批准'],
-      '61': ['CPSIA合规 (消费品安全)', 'FTC纺织标签'],
-      '62': ['CPSIA合规 (消费品安全)', 'FTC纺织标签'],
-      '64': ['CPSC消费品安全合规'],
-      '95': ['CPSC玩具安全认证', 'ASTM F963测试报告'],
-      '02': ['USDA/FSIS进口许可', 'APHIS检疫证书'],
-      '03': ['FDA/NOAA进口许可'],
-      '87': ['EPA排放合规', 'DOT安全标准', 'NHTSA认证'],
-      '90': ['FDA 510(k)医疗器械审批'],
+      '85': ['FCC Certification (Electronics)', 'UL Safety Certification (Recommended)'],
+      '84': ['FCC Certification (Wireless Devices)', 'UL Certification (Electrical Safety)'],
+      '33': ['FDA Registration (Cosmetics)', 'CPSC Compliance (Consumer Product Safety)'],
+      '30': ['FDA Drug Registration', 'NDC Code', 'FDA Import Permit'],
+      '22': ['TTB Import Permit (Alcohol)', 'FDA Food Facility Registration', 'COLA Label Approval'],
+      '61': ['CPSIA Compliance (Consumer Safety)', 'FTC Textile Labeling'],
+      '62': ['CPSIA Compliance (Consumer Safety)', 'FTC Textile Labeling'],
+      '64': ['CPSC Consumer Product Safety Compliance'],
+      '95': ['CPSC Toy Safety Certification', 'ASTM F963 Test Report'],
+      '02': ['USDA/FSIS Import Permit', 'APHIS Quarantine Certificate'],
+      '03': ['FDA/NOAA Import Permit'],
+      '87': ['EPA Emissions Compliance', 'DOT Safety Standards', 'NHTSA Certification'],
+      '90': ['FDA 510(k) Medical Device Approval'],
     }
   },
   DE: {
-    general: ['Commercial Invoice', 'EUR.1原产地证 (FTA适用)', 'CE认证标志', 'EORI号码', 'Packing List'],
+    general: ['Commercial Invoice', 'EUR.1 Certificate of Origin (FTA)', 'CE Mark', 'EORI Number', 'Packing List'],
     chapters: {
-      '85': ['CE认证 (电磁兼容EMC)', 'RoHS合规声明', 'WEEE注册'],
-      '84': ['CE机械指令认证', 'RoHS合规'],
-      '33': ['EU化妆品法规EC 1223/2009', 'CPNP注册'],
-      '22': ['EU酒精饮料标签合规', 'VI-1表格 (葡萄酒)'],
-      '95': ['EN 71玩具安全标准', 'CE认证'],
-      '87': ['EU型式批准', 'CoC一致性证书'],
+      '85': ['CE Certification (EMC)', 'RoHS Compliance Declaration', 'WEEE Registration'],
+      '84': ['CE Machinery Directive Certification', 'RoHS Compliance'],
+      '33': ['EU Cosmetics Regulation EC 1223/2009', 'CPNP Registration'],
+      '22': ['EU Alcohol Beverage Labeling Compliance', 'VI-1 Form (Wine)'],
+      '95': ['EN 71 Toy Safety Standard', 'CE Certification'],
+      '87': ['EU Type Approval', 'CoC Certificate of Conformity'],
     }
   },
   GB: {
-    general: ['Commercial Invoice', 'UKCA/CE标志', 'EORI号码 (GB)', 'Packing List', 'C88进口申报单'],
+    general: ['Commercial Invoice', 'UKCA/CE Mark', 'EORI Number (GB)', 'Packing List', 'C88 Import Declaration'],
     chapters: {
-      '85': ['UKCA认证 (2025年底前CE亦可)', 'RoHS合规'],
-      '33': ['UK化妆品法规', 'SCPN注册'],
-      '95': ['UK玩具安全法规', 'UKCA认证'],
+      '85': ['UKCA Certification (CE accepted until end 2025)', 'RoHS Compliance'],
+      '33': ['UK Cosmetics Regulation', 'SCPN Registration'],
+      '95': ['UK Toy Safety Regulation', 'UKCA Certification'],
     }
   },
   JP: {
-    general: ['Commercial Invoice', 'Packing List', 'Bill of Lading', '日本海关申报 (通関申告書)'],
+    general: ['Commercial Invoice', 'Packing List', 'Bill of Lading', 'Japan Customs Declaration'],
     chapters: {
-      '85': ['PSE电气安全认证', 'TELEC无线认证 (含无线功能)', 'VCCI EMC认证'],
-      '33': ['厚生劳动省化妆品进口许可'],
-      '30': ['厚生劳动省药品进口许可'],
-      '22': ['酒税法进口许可'],
-      '95': ['ST标志 (玩具安全)', '食品卫生法合规 (儿童用品)'],
+      '85': ['PSE Electrical Safety Certification', 'TELEC Wireless Certification', 'VCCI EMC Certification'],
+      '33': ['MHLW Cosmetics Import License'],
+      '30': ['MHLW Pharmaceutical Import License'],
+      '22': ['Liquor Tax Act Import Permit'],
+      '95': ['ST Mark (Toy Safety)', 'Food Sanitation Act Compliance (Children\'s Products)'],
     }
   },
   KR: {
-    general: ['Commercial Invoice', 'Packing List', 'B/L', 'KC认证 (适用时)'],
+    general: ['Commercial Invoice', 'Packing List', 'B/L', 'KC Certification (if applicable)'],
     chapters: {
-      '85': ['KC认证 (电气安全)', 'KCC EMC认证'],
-      '33': ['MFDS化妆品进口注册'],
-      '95': ['KC儿童安全认证'],
+      '85': ['KC Certification (Electrical Safety)', 'KCC EMC Certification'],
+      '33': ['MFDS Cosmetics Import Registration'],
+      '95': ['KC Children\'s Safety Certification'],
     }
   },
   AU: {
     general: ['Commercial Invoice', 'Packing List', 'B/L', 'Import Declaration (N10)'],
     chapters: {
-      '85': ['RCM合规标志', 'SAA电气安全'],
-      '02': ['DAFF进口许可 (检疫)', '健康证书'],
-      '03': ['DAFF检疫许可'],
+      '85': ['RCM Compliance Mark', 'SAA Electrical Safety'],
+      '02': ['DAFF Import Permit (Quarantine)', 'Health Certificate'],
+      '03': ['DAFF Quarantine Permit'],
     }
   },
   CN: {
-    general: ['Commercial Invoice (商业发票)', 'Packing List (装箱单)', 'B/L (提单)', '报关委托书', '进口许可证 (适用时)'],
+    general: ['Commercial Invoice', 'Packing List', 'B/L', 'Customs Declaration Power of Attorney', 'Import License (if applicable)'],
     chapters: {
-      '85': ['CCC强制认证 (3C认证)', 'SRRC无线电型号核准'],
-      '84': ['CCC强制认证 (适用品类)'],
-      '33': ['NMPA化妆品备案/注册'],
-      '30': ['NMPA药品进口注册证'],
-      '22': ['进口食品标签备案', '卫生证书'],
-      '02': ['进境动物检疫许可证', '输出国卫生证书'],
-      '87': ['CCC强制认证', '环保信息公开'],
-      '95': ['CCC认证 (适用品类)', 'GB 6675玩具安全'],
+      '85': ['CCC Mandatory Certification (3C)', 'SRRC Radio Type Approval'],
+      '84': ['CCC Mandatory Certification (applicable categories)'],
+      '33': ['NMPA Cosmetics Filing/Registration'],
+      '30': ['NMPA Drug Import Registration'],
+      '22': ['Import Food Label Filing', 'Health Certificate'],
+      '02': ['Import Animal Quarantine Permit', 'Exporting Country Health Certificate'],
+      '87': ['CCC Mandatory Certification', 'Environmental Information Disclosure'],
+      '95': ['CCC Certification (applicable categories)', 'GB 6675 Toy Safety'],
     }
   }
 };
@@ -1419,19 +1419,19 @@ const CERT_REQUIREMENTS = {
 // Origin country export requirements
 const EXPORT_REQUIREMENTS = {
   CN: {
-    general: ['出口报关单', '出口装箱单', '出口发票', '原产地证书 (CO/FORM E/FORM F等)'],
+    general: ['Export Customs Declaration', 'Export Packing List', 'Export Invoice', 'Certificate of Origin (CO/FORM E/FORM F)'],
     chapters: {
-      '85': ['出口许可证 (部分两用物项)', '商检证书 (法检商品)'],
-      '84': ['出口许可证 (两用物项)', '机电产品出口许可 (适用时)'],
-      '28': ['危化品出口许可', '危险品包装鉴定'],
-      '29': ['危化品出口许可'],
+      '85': ['Export License (Dual-use Items)', 'Inspection Certificate (Statutory Inspection Goods)'],
+      '84': ['Export License (Dual-use Items)', 'Electromechanical Product Export License (if applicable)'],
+      '28': ['Hazardous Chemicals Export License', 'Dangerous Goods Packaging Certificate'],
+      '29': ['Hazardous Chemicals Export License'],
     }
   },
   US: {
     general: ['Shipper\'s Export Declaration (SED)', 'EEI filing (via AES)', 'Commercial Invoice'],
     chapters: {
-      '85': ['BIS Export License (EAR管控)', 'ECCN分类'],
-      '84': ['BIS Export License (高科技设备)'],
+      '85': ['BIS Export License (EAR Controlled)', 'ECCN Classification'],
+      '84': ['BIS Export License (High-Tech Equipment)'],
     }
   }
 };
@@ -1459,8 +1459,8 @@ async function checkRisk(){
   if(!item){
     alertMsg=zh?'⚠️ HS编码 '+hs+' 未在本地库和UN Comtrade中找到，请核实编码':'⚠️ HS code '+hs+' not found in database. Please verify.';
   } else {
-    itemName = item.name;
-    if(item.restricted){alertMsg=zh?`🚫 高风险：管制商品 — ${item.reason}`:`🚫 High Risk: Controlled Item — ${item.reason}`;risks.push(zh?`需办理：${item.license}`:`Required: ${item.license}`);}
+    itemName = zh&&item.nameZh?item.nameZh:item.name;
+    if(item.restricted){alertMsg=zh?`🚫 高风险：管制商品 — ${item.zhReason||item.reason}`:`🚫 High Risk: Controlled Item — ${item.reason}`;risks.push(zh?`需办理：${item.zhLicense||item.license}`:`Required: ${item.license}`);}
     else{alertMsg=zh?'✅ 检查完成 · 未发现合规风险':'✅ Check Complete · No compliance risks found';}
   }
   // Supabase API risk results
@@ -1470,7 +1470,7 @@ async function checkRisk(){
   if (supabaseRisk?.alert) alertMsg = supabaseRisk.alert;
   // Country-aware tariff analysis for risk context
   const tariffInfo = getDutyRate(origin, dest, hs);
-  if (tariffInfo.specialRate > 0) risks.push(`⚠️ 特别关税附加：${tariffInfo.specialLabel} (+${(tariffInfo.specialRate*100).toFixed(1)}%)`);
+  if (tariffInfo.specialRate > 0) risks.push(`⚠️ Special tariff surcharge: ${tariffInfo.specialLabel} (+${(tariffInfo.specialRate*100).toFixed(1)}%)`);
   if(hs.startsWith('8542')||hs.startsWith('8541'))risks.push(zh?'🚫 半导体相关：多国实施出口管制，请核查BIS/METI管制清单':'🚫 Semiconductor: Multi-country export controls. Check BIS/METI lists');
   if(dest==='US' && hs.startsWith('85'))risks.push(zh?'⚠️ 美国对电子/科技产品出口管制加强，建议核查EAR清单':'⚠️ US enhanced export controls on electronics/tech. Check EAR list');
   if(origin==='CN' && dest==='US') risks.push(zh?'⚠️ 注意UFLPA（维吾尔强迫劳动预防法）合规要求':'⚠️ Check UFLPA (Uyghur Forced Labor Prevention Act) compliance');
@@ -1492,7 +1492,7 @@ async function checkRisk(){
   const originExport = EXPORT_REQUIREMENTS[origin] || {};
   const destGeneral = destCerts.general || ['Commercial Invoice', 'Packing List', 'Bill of Lading'];
   const destSpecific = destCerts.chapters?.[ch] || [];
-  const originGeneral = originExport.general || ['出口报关单', '商业发票'];
+  const originGeneral = originExport.general || ['Export Declaration', 'Commercial Invoice'];
   const originSpecific = originExport.chapters?.[ch] || [];
 
   const originC = COUNTRIES.find(c=>c.code===origin);
@@ -1559,18 +1559,18 @@ async function fetchLLMRiskAnalysis(hs, origin, dest, itemName) {
   llmEl.innerHTML = '<div class="alert alert-info mt-3"><span class="spinner" style="border-color:rgba(37,99,235,.3);border-top-color:var(--primary)"></span> '+(zh?'正在调用大模型进行深度合规分析...':'Calling LLM for deep compliance analysis...')+'</div>';
   const originC = COUNTRIES.find(c=>c.code===origin);
   const destC = COUNTRIES.find(c=>c.code===dest);
-  const prompt = `你是一位国际贸易合规专家。请针对以下贸易场景，提供专业合规分析建议：
-商品：${itemName} (HS编码: ${hs})
-原产国：${originC?originC.name:origin}
-目的国：${destC?destC.name:dest}
+  const prompt = `You are an international trade compliance expert. Provide professional compliance analysis for the following trade scenario:
+Product: ${itemName} (HS Code: ${hs})
+Origin: ${originC?originC.name:origin}
+Destination: ${destC?destC.name:dest}
 
-请从以下角度分析：
-1. 该商品从${originC?originC.name:origin}出口到${destC?destC.name:dest}需要的关键认证和许可证
-2. 潜在的贸易壁垒和风险（反倾销、制裁、出口管制等）
-3. 建议的合规策略和注意事项
-4. 相关法规和参考依据
+Please analyze from the following perspectives:
+1. Key certifications and licenses required for exporting from ${originC?originC.name:origin} to ${destC?destC.name:dest}
+2. Potential trade barriers and risks (anti-dumping, sanctions, export controls, etc.)
+3. Recommended compliance strategies and considerations
+4. Relevant regulations and references
 
-请用中文回复，条理清晰，带编号列出要点。`;
+Please respond clearly with numbered points.`;
   try {
     // Try multiple LLM endpoints
     let llmText = null;
@@ -1584,7 +1584,7 @@ async function fetchLLMRiskAnalysis(hs, origin, dest, itemName) {
     // 2. Try Supabase generic chat function
     if (!llmText) {
       try {
-        const res2 = await invokeFunction('chat', { messages: [{ role:'system', content:'你是一位国际贸易合规专家。' },{ role:'user', content: prompt }] });
+        const res2 = await invokeFunction('chat', { messages: [{ role:'system', content:'You are an international trade compliance expert.' },{ role:'user', content: prompt }] });
         if (res2?.choices?.[0]?.message?.content) llmText = res2.choices[0].message.content;
         else if (res2?.text || res2?.content || res2?.result) llmText = res2.text || res2.content || res2.result;
       } catch(e2) { console.warn('chat function failed:', e2.message); }
@@ -1603,33 +1603,33 @@ async function fetchLLMRiskAnalysis(hs, origin, dest, itemName) {
         <p class="text-xs text-muted mt-3">* ${zh?'AI分析结果仅供参考，实际合规要求请以官方法规为准':'AI analysis is for reference only. Actual requirements are subject to official regulations.'}</p>
       </div>`;
     } else {
-      throw new Error('所有LLM端点均未返回有效结果');
+      throw new Error('All LLM endpoints failed to return valid results');
     }
   } catch(e) {
     // Fallback: generate local analysis
     const ch = hs.substring(0, 2);
     let analysis = `📋 ${itemName || 'HS '+hs} · ${originC?originC.flag+' '+originC.name:origin} → ${destC?destC.flag+' '+destC.name:dest}\n\n`;
-    analysis += `【合规概要】\n`;
+    analysis += `[Compliance Summary]\n`;
     if (dest === 'US') {
-      analysis += `• 美国海关 (CBP) 要求所有进口货物提交ISF 10+2申报\n`;
-      analysis += `• 需指定美国进口商 (Importer of Record) 持有CBP Bond\n`;
-      if (['85','84'].includes(ch)) analysis += `• 电子/机械类产品需FCC认证，建议提前办理\n• 注意BIS出口管制清单 (EAR) 及实体清单筛查\n`;
-      if (ch === '33') analysis += `• 化妆品需FDA注册，标签须符合FD&C Act要求\n`;
-      if (['61','62','64'].includes(ch)) analysis += `• 纺织服装类需提供纤维成分标签 (FTC规则)\n• 注意反倾销/反补贴税令审查\n`;
-      if (origin === 'CN') analysis += `• ⚠️ 中国出口美国：注意Section 301关税附加 (7.5%-25%)\n• 建议核查UFLPA (强迫劳动预防法) 合规\n`;
+      analysis += `• US Customs (CBP) requires ISF 10+2 filing for all imports\n`;
+      analysis += `• Must designate US Importer of Record with CBP Bond\n`;
+      if (['85','84'].includes(ch)) analysis += `• Electronics/machinery require FCC certification, recommend early application\n• Check BIS Export Control List (EAR) and Entity List screening\n`;
+      if (ch === '33') analysis += `• Cosmetics require FDA registration, labels must comply with FD&C Act\n`;
+      if (['61','62','64'].includes(ch)) analysis += `• Textiles/apparel require fiber content labeling (FTC rules)\n• Check anti-dumping/countervailing duty orders\n`;
+      if (origin === 'CN') analysis += `• ⚠️ China to US: Note Section 301 tariff surcharge (7.5%-25%)\n• Recommend UFLPA (Uyghur Forced Labor Prevention Act) compliance check\n`;
     } else if (['DE','GB'].includes(dest)) {
-      analysis += `• 欧盟/英国市场：CE/UKCA认证为基本要求\n`;
-      analysis += `• REACH化学物质法规合规 (适用时)\n`;
-      analysis += `• 2026年起CBAM碳边境调节机制将正式征税\n`;
+      analysis += `• EU/UK market: CE/UKCA certification is a basic requirement\n`;
+      analysis += `• REACH chemical substances regulation compliance (if applicable)\n`;
+      analysis += `• CBAM carbon border adjustment mechanism levy starts 2026\n`;
     } else if (dest === 'JP') {
-      analysis += `• 日本海关严格执行产品安全标准 (PSE/PSC)\n`;
-      analysis += `• 食品类需符合食品卫生法，电子类需TELEC认证\n`;
+      analysis += `• Japan customs strictly enforces product safety standards (PSE/PSC)\n`;
+      analysis += `• Food products must comply with Food Sanitation Act; electronics require TELEC certification\n`;
     }
-    analysis += `\n【建议策略】\n`;
-    analysis += `• 提前准备所有必要证书，避免货到港后被扣\n`;
-    analysis += `• 建议委托目的国持牌报关行协助清关\n`;
-    analysis += `• 定期关注贸易政策变化，特别是关税调整\n`;
-    analysis += `• 建议购买贸易信用保险降低风险\n`;
+    analysis += `\n[Recommended Strategy]\n`;
+    analysis += `• Prepare all necessary certificates in advance to avoid port detention\n`;
+    analysis += `• Recommend engaging a licensed customs broker in the destination country\n`;
+    analysis += `• Monitor trade policy changes regularly, especially tariff adjustments\n`;
+    analysis += `• Consider trade credit insurance to mitigate risk\n`;
     llmEl.innerHTML = `<div class="alert mt-3" style="background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.2)">
       <h4 class="font-bold mb-2">🤖 ${zh?'AI合规分析报告（本地知识库）':'AI Compliance Report (Local KB)'}</h4>
       <div class="text-sm" style="white-space:pre-wrap;line-height:1.8">${analysis}</div>
@@ -1658,13 +1658,13 @@ async function fetchTradeStats(origin, dest) {
       const expVal = expData[1]?.find(r => r.value !== null);
       const impVal = impData[1]?.find(r => r.value !== null);
       if (expVal || impVal) {
-        const fmtB = v => v > 1e12 ? (v/1e12).toFixed(1)+'万亿USD' : v > 1e9 ? (v/1e9).toFixed(1)+'亿USD' : (v/1e6).toFixed(0)+'百万USD';
+        const fmtB = v => v > 1e12 ? (v/1e12).toFixed(1)+'T USD' : v > 1e9 ? (v/1e9).toFixed(1)+'B USD' : (v/1e6).toFixed(0)+'M USD';
         const result = {
           exports: expVal ? fmtB(expVal.value) : '--',
           imports: impVal ? fmtB(impVal.value) : '--',
           total: (expVal && impVal) ? fmtB(expVal.value + impVal.value) : '--',
           year: expVal?.date || impVal?.date || '2023',
-          source: '世界银行'
+          source: 'World Bank'
         };
         TRADE_STATS_CACHE[key] = result;
         return result;
@@ -1673,12 +1673,12 @@ async function fetchTradeStats(origin, dest) {
   } catch(e) { console.warn('Trade stats fetch failed:', e.message); }
   // Fallback: known major trade pairs
   const knownPairs = {
-    'CN_US': { exports:'5,600亿USD', imports:'1,800亿USD', total:'7,400亿USD', year:'2023', source:'估算值' },
-    'CN_JP': { exports:'1,500亿USD', imports:'1,700亿USD', total:'3,200亿USD', year:'2023', source:'估算值' },
-    'CN_DE': { exports:'1,100亿USD', imports:'1,000亿USD', total:'2,100亿USD', year:'2023', source:'估算值' },
-    'CN_KR': { exports:'1,600亿USD', imports:'1,900亿USD', total:'3,500亿USD', year:'2023', source:'估算值' },
-    'CN_VN': { exports:'1,500亿USD', imports:'650亿USD', total:'2,150亿USD', year:'2023', source:'估算值' },
-    'CN_AU': { exports:'700亿USD', imports:'1,400亿USD', total:'2,100亿USD', year:'2023', source:'估算值' },
+    'CN_US': { exports:'560B USD', imports:'180B USD', total:'740B USD', year:'2023', source:'Estimate' },
+    'CN_JP': { exports:'150B USD', imports:'170B USD', total:'320B USD', year:'2023', source:'Estimate' },
+    'CN_DE': { exports:'110B USD', imports:'100B USD', total:'210B USD', year:'2023', source:'Estimate' },
+    'CN_KR': { exports:'160B USD', imports:'190B USD', total:'350B USD', year:'2023', source:'Estimate' },
+    'CN_VN': { exports:'150B USD', imports:'65B USD', total:'215B USD', year:'2023', source:'Estimate' },
+    'CN_AU': { exports:'70B USD', imports:'140B USD', total:'210B USD', year:'2023', source:'Estimate' },
   };
   return knownPairs[key] || knownPairs[key.split('_').reverse().join('_')] || null;
 }
@@ -1706,11 +1706,11 @@ function handleDrop(e){e.preventDefault();document.getElementById('dropzone').cl
 function handleFile(e){if(e.target.files?.[0])processImage(e.target.files[0]);}
 
 async function processImage(file){
-  if(!file.type.startsWith('image/')){alert('请上传图片');return;}
+  if(!file.type.startsWith('image/')){alert('Please upload an image');return;}
   const reader=new FileReader();
   reader.onload=async(e)=>{
     const src=e.target.result;
-    document.getElementById('vision-result').innerHTML=`<img src="${src}" style="max-height:160px;border-radius:.5rem;margin-bottom:1rem;display:block;margin-left:auto;margin-right:auto"><p class="text-sm font-medium text-success">AI视觉识别中（首次约5-15秒）...</p>`;
+    document.getElementById('vision-result').innerHTML=`<img src="${src}" style="max-height:160px;border-radius:.5rem;margin-bottom:1rem;display:block;margin-left:auto;margin-right:auto"><p class="text-sm font-medium text-success">AI visual recognition in progress (first time ~5-15s)...</p>`;
     const img=new Image();img.crossOrigin='anonymous';
     img.onload=async()=>{
       try{const model=await loadModel();const out=await model.classify(img,5);
@@ -1719,8 +1719,8 @@ async function processImage(file){
           return `<div class="flex justify-between border-b" style="border-color:rgba(226,232,240,.5);padding:.5rem 0"><span>${cn}</span><span class="text-muted">${(p.probability*100).toFixed(1)}%</span></div>`;
         }).join('');
         const topLabel=LABEL_CN[out[0].className.split(',')[0].trim()]||out[0].className.split(',')[0].trim();
-        document.getElementById('vision-result').innerHTML=`<img src="${src}" style="max-height:160px;border-radius:.5rem;margin-bottom:1rem;display:block;margin-left:auto;margin-right:auto"><p class="text-sm font-medium text-success">✅ 识别完成 (置信度 ${(out[0].probability*100).toFixed(1)}%)</p><div class="text-sm">${preds}</div><button class="btn btn-accent w-full mt-3" onclick="document.getElementById('classify-text').value='${topLabel}';classify();document.getElementById('classify').scrollIntoView({behavior:'smooth'})">→ 用「${topLabel}」做HS归类</button><p class="text-xs text-muted mt-2 text-center">模型：TensorFlow.js MobileNet v2（本地推理 · 免费 · 无需API Key）</p>`;
-      }catch(err){document.getElementById('vision-result').innerHTML=`<p class="text-sm text-danger">❌ 模型加载失败：${err.message}</p>`;}
+        document.getElementById('vision-result').innerHTML=`<img src="${src}" style="max-height:160px;border-radius:.5rem;margin-bottom:1rem;display:block;margin-left:auto;margin-right:auto"><p class="text-sm font-medium text-success">✅ Recognition complete (confidence ${(out[0].probability*100).toFixed(1)}%)</p><div class="text-sm">${preds}</div><button class="btn btn-accent w-full mt-3" onclick="document.getElementById('classify-text').value='${topLabel}';classify();document.getElementById('classify').scrollIntoView({behavior:'smooth'})">→ Classify "${topLabel}" by HS code</button><p class="text-xs text-muted mt-2 text-center">Model: TensorFlow.js MobileNet v2 (local inference, free, no API key)</p>`;
+      }catch(err){document.getElementById('vision-result').innerHTML=`<p class="text-sm text-danger">❌ Model loading failed: ${err.message}</p>`;}
     };
     img.src=src;
   };
@@ -1776,7 +1776,7 @@ async function calculateLogistics(){
   let freightSource = zh?'参考SCFI指数':'SCFI Index';
   if (apiFreight) {
     freight = apiFreight.freight;
-    freightSource = apiFreight.source || '云端API实时报价';
+    freightSource = apiFreight.source || 'Cloud API Live Quote';
   } else {
     if (mode === 'sea-fcl') {
       const rateTable = FREIGHT_RATE_INDEX['sea-fcl'][container] || FREIGHT_RATE_INDEX['sea-fcl']['20GP'];
@@ -1810,7 +1810,7 @@ async function calculateLogistics(){
     dutyAmount = cif * dutyRate;
     consAmount = consRate > 0 ? (cif + dutyAmount) / (1 - consRate) * consRate : 0;
     vatAmount = (cif + dutyAmount + consAmount) * vatRate;
-    tariffSource = hsItem ? (hsItem.source === 'local' ? '本地精确库' : hsItem.source === 'supabase-api' ? '云端关税API' : 'UN Comtrade') : '';
+    tariffSource = hsItem ? (hsItem.source === 'local' ? 'Local DB' : hsItem.source === 'supabase-api' ? 'Cloud Tariff API' : 'UN Comtrade') : '';
   }
   // Surcharges
   const surcharge =
@@ -1830,43 +1830,43 @@ async function calculateLogistics(){
   let html = '';
   html += `<div class="alert alert-info mt-4 fade-in" style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">`;
   html += `<strong>${originC?originC.flag:''} ${origin}</strong> → <strong>${destC?destC.flag:''} ${dest}</strong>`;
-  if (hsItem) html += ` · ${hsItem.name} (${hs})`;
-  html += ` · 运费数据: ${freightSource}`;
-  if (tariffSource) html += ` · 关税数据: ${tariffSource}`;
+  if (hsItem) html += ` · ${zh&&hsItem.nameZh?hsItem.nameZh:hsItem.name} (${hs})`;
+  html += ` · Freight data: ${freightSource}`;
+  if (tariffSource) html += ` · Tariff data: ${tariffSource}`;
   html += `</div>`;
   // Cost breakdown table
-  html += `<table class="table mt-3 fade-in"><thead><tr><th>费用项目</th><th style="text-align:right">金额 (CNY)</th><th style="text-align:right">备注</th></tr></thead><tbody>`;
-  html += `<tr><td>商品价值</td><td style="text-align:right;font-family:monospace">${valueCNY.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${currency !== 'CNY' ? goodsValue+' '+currency+' × '+fxRate.toFixed(4) : '-'}</td></tr>`;
-  html += `<tr><td>国际运费 (${mode==='sea-fcl'?'海运整箱 '+container:mode==='sea-lcl'?'海运拼箱 '+vol+'CBM':mode==='air'?'空运 '+vol+'KG':'快递 '+vol+'KG'})</td><td style="text-align:right;font-family:monospace">${freight.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${freightSource}</td></tr>`;
-  html += `<tr><td>运输保险 (0.3%)</td><td style="text-align:right;font-family:monospace">${insurance.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">货值 × 0.3%</td></tr>`;
-  html += `<tr style="font-weight:700;background:rgba(37,99,235,.05)"><td>CIF完税价格</td><td style="text-align:right;font-family:monospace">${cif.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">-</td></tr>`;
+  html += `<table class="table mt-3 fade-in"><thead><tr><th>Cost Item</th><th style="text-align:right">Amount (CNY)</th><th style="text-align:right">Notes</th></tr></thead><tbody>`;
+  html += `<tr><td>Goods Value</td><td style="text-align:right;font-family:monospace">${valueCNY.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${currency !== 'CNY' ? goodsValue+' '+currency+' × '+fxRate.toFixed(4) : '-'}</td></tr>`;
+  html += `<tr><td>Intl. Freight (${mode==='sea-fcl'?'Sea FCL '+container:mode==='sea-lcl'?'Sea LCL '+vol+'CBM':mode==='air'?'Air '+vol+'KG':'Express '+vol+'KG'})</td><td style="text-align:right;font-family:monospace">${freight.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${freightSource}</td></tr>`;
+  html += `<tr><td>Cargo Insurance (0.3%)</td><td style="text-align:right;font-family:monospace">${insurance.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">Value × 0.3%</td></tr>`;
+  html += `<tr style="font-weight:700;background:rgba(37,99,235,.05)"><td>CIF Value</td><td style="text-align:right;font-family:monospace">${cif.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">-</td></tr>`;
   if (hs) {
-    html += `<tr><td>进口关税 (${(dutyRate*100).toFixed(1)}%)</td><td style="text-align:right;font-family:monospace;color:var(--warning)">${dutyAmount.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${tariffInfo?.specialLabel||'-'}</td></tr>`;
-    if (consRate > 0) html += `<tr><td>消费税 (${(consRate*100).toFixed(0)}%)</td><td style="text-align:right;font-family:monospace">${consAmount.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">-</td></tr>`;
-    html += `<tr><td>增值税/GST (${(vatRate*100).toFixed(0)}%)</td><td style="text-align:right;font-family:monospace">${vatAmount.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${dest} 标准税率</td></tr>`;
-    html += `<tr style="font-weight:700;background:rgba(245,158,11,.05)"><td>税费小计</td><td style="text-align:right;font-family:monospace;color:var(--warning)">${totalTax.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">-</td></tr>`;
+    html += `<tr><td>Import Duty (${(dutyRate*100).toFixed(1)}%)</td><td style="text-align:right;font-family:monospace;color:var(--warning)">${dutyAmount.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${tariffInfo?.specialLabel||'-'}</td></tr>`;
+    if (consRate > 0) html += `<tr><td>Consumption Tax (${(consRate*100).toFixed(0)}%)</td><td style="text-align:right;font-family:monospace">${consAmount.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">-</td></tr>`;
+    html += `<tr><td>VAT/GST (${(vatRate*100).toFixed(0)}%)</td><td style="text-align:right;font-family:monospace">${vatAmount.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">${dest} Standard Rate</td></tr>`;
+    html += `<tr style="font-weight:700;background:rgba(245,158,11,.05)"><td>Tax Subtotal</td><td style="text-align:right;font-family:monospace;color:var(--warning)">${totalTax.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">-</td></tr>`;
   } else {
-    html += `<tr><td colspan="3" style="text-align:center;color:var(--muted-fg);font-size:.8rem">填写HS编码可自动计算关税+增值税</td></tr>`;
+    html += `<tr><td colspan="3" style="text-align:center;color:var(--muted-fg);font-size:.8rem">Enter HS code to auto-calculate duty + VAT</td></tr>`;
   }
-  html += `<tr><td>港口/杂费</td><td style="text-align:right;font-family:monospace">${surcharge.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">报关+单证+港杂+其他</td></tr>`;
-  html += `<tr style="font-weight:700;font-size:1.1rem;background:rgba(234,88,12,.1)"><td>💰 总落地成本</td><td style="text-align:right;font-family:monospace;color:#c2410c">${totalLanded.toFixed(0)} CNY</td><td style="text-align:right;font-size:.75rem">≈ ${(totalLanded/rates.USD).toFixed(0)} USD</td></tr>`;
+  html += `<tr><td>Port/Misc. Charges</td><td style="text-align:right;font-family:monospace">${surcharge.toFixed(0)}</td><td style="text-align:right;font-size:.75rem">Customs + Docs + Port + Other</td></tr>`;
+  html += `<tr style="font-weight:700;font-size:1.1rem;background:rgba(234,88,12,.1)"><td>💰 Total Landed Cost</td><td style="text-align:right;font-family:monospace;color:#c2410c">${totalLanded.toFixed(0)} CNY</td><td style="text-align:right;font-size:.75rem">≈ ${(totalLanded/rates.USD).toFixed(0)} USD</td></tr>`;
   html += `</tbody></table>`;
   // Visual summary cards
   html += `<div class="results-grid results-grid-5 mt-3 fade-in">`;
-  html += `<div class="stat"><p>商品价值</p><p>${valueCNY.toFixed(0)}</p></div>`;
-  html += `<div class="stat"><p>运费+保险</p><p>${(freight+insurance).toFixed(0)}</p></div>`;
-  html += `<div class="stat stat-amber"><p>关税+增值税</p><p>${totalTax.toFixed(0)}</p></div>`;
-  html += `<div class="stat"><p>杂费</p><p>${surcharge.toFixed(0)}</p></div>`;
-  html += `<div class="stat stat-highlight"><p>总落地成本</p><p>${totalLanded.toFixed(0)}</p></div>`;
+  html += `<div class="stat"><p>Goods Value</p><p>${valueCNY.toFixed(0)}</p></div>`;
+  html += `<div class="stat"><p>Freight+Insurance</p><p>${(freight+insurance).toFixed(0)}</p></div>`;
+  html += `<div class="stat stat-amber"><p>Duty+VAT</p><p>${totalTax.toFixed(0)}</p></div>`;
+  html += `<div class="stat"><p>Misc.</p><p>${surcharge.toFixed(0)}</p></div>`;
+  html += `<div class="stat stat-highlight"><p>Total Landed</p><p>${totalLanded.toFixed(0)}</p></div>`;
   html += `</div>`;
   // Tax rate as % of goods value
   if (hs) {
     const taxPct = ((totalTax / valueCNY) * 100).toFixed(1);
     const landedPct = ((totalLanded / valueCNY) * 100).toFixed(1);
-    html += `<div class="text-xs text-muted mt-2">综合税费率: ${taxPct}% · 落地成本/货值比: ${landedPct}%${tariffInfo?.ftaInfo ? ' · 已享受 '+tariffInfo.ftaInfo.name+' 优惠' : ''}</div>`;
+    html += `<div class="text-xs text-muted mt-2">Effective tax rate: ${taxPct}% · Landed cost/value ratio: ${landedPct}%${tariffInfo?.ftaInfo ? ' · FTA discount applied: '+tariffInfo.ftaInfo.name : ''}</div>`;
   }
   document.getElementById('log-result').innerHTML = html;
-  btn.disabled = false; btn.textContent = '估算全链路落地成本';
+  btn.disabled = false; btn.textContent = 'Estimate Total Landed Cost';
 }
 
 // ===================== TRACKING (multi-carrier direct links + API) =====================
@@ -1881,23 +1881,23 @@ function detectCarrier(num) {
   // USPS
   if (/^(94|93|92|94|95)\d{18,22}$/.test(n) || /^(EA|EC|CP|RA|RR|RB|RN)\d{9}US$/.test(n)) return { name:'USPS', url:`https://tools.usps.com/go/TrackConfirmAction?tLabels=${n}`, api:null };
   // EMS / China Post
-  if (/^(E[A-Z]|C[A-Z]|R[A-Z]|L[A-Z]|V[A-Z])\d{9}[A-Z]{2}$/.test(n)) return { name:'EMS/邮政', url:`https://t.17track.net/en#nums=${n}`, api:`https://t.17track.net/en#nums=${n}` };
+  if (/^(E[A-Z]|C[A-Z]|R[A-Z]|L[A-Z]|V[A-Z])\d{9}[A-Z]{2}$/.test(n)) return { name:'EMS/Postal', url:`https://t.17track.net/en#nums=${n}`, api:`https://t.17track.net/en#nums=${n}` };
   // SF Express 顺丰
-  if (/^SF\d{12,15}$/.test(n)) return { name:'顺丰 SF Express', url:`https://www.sf-express.com/chn/sc/dynamic_function/waybill/#search/bill-number/${n}`, api:null };
+  if (/^SF\d{12,15}$/.test(n)) return { name:'SF Express', url:`https://www.sf-express.com/chn/sc/dynamic_function/waybill/#search/bill-number/${n}`, api:null };
   // YTO 圆通
-  if (/^YT\d{13,18}$/.test(n)) return { name:'圆通 YTO', url:`https://www.yto.net.cn/tracking/tracking.html`, api:null };
+  if (/^YT\d{13,18}$/.test(n)) return { name:'YTO Express', url:`https://www.yto.net.cn/tracking/tracking.html`, api:null };
   // ZTO 中通
-  if (/^(78|68|48)\d{10,12}$/.test(n)) return { name:'中通 ZTO', url:`https://www.zto.com/GuestService/Bill`, api:null };
+  if (/^(78|68|48)\d{10,12}$/.test(n)) return { name:'ZTO Express', url:`https://www.zto.com/GuestService/Bill`, api:null };
   // Maersk container
-  if (/^M[A-Z]{3}\d{6,7}$/.test(n) || /^[A-Z]{4}\d{7}$/.test(n)) return { name:'Maersk/集装箱', url:`https://www.maersk.com/tracking/${n}`, api:null };
+  if (/^M[A-Z]{3}\d{6,7}$/.test(n) || /^[A-Z]{4}\d{7}$/.test(n)) return { name:'Maersk/Container', url:`https://www.maersk.com/tracking/${n}`, api:null };
   // Generic fallback -> 17track
-  return { name:'自动识别', url:`https://t.17track.net/en#nums=${n}`, api:`https://t.17track.net/en#nums=${n}` };
+  return { name:'Auto-detect', url:`https://t.17track.net/en#nums=${n}`, api:`https://t.17track.net/en#nums=${n}` };
 }
 
 async function trackPackage(){
   const num=document.getElementById('track-num').value.trim();
-  if(!num){document.getElementById('track-error').innerHTML='<div class="alert alert-warning mt-3">请输入运单号</div>';return;}
-  const btn=document.getElementById('track-btn');btn.disabled=true;btn.textContent='查询中...';
+  if(!num){document.getElementById('track-error').innerHTML='<div class="alert alert-warning mt-3">Please enter tracking number</div>';return;}
+  const btn=document.getElementById('track-btn');btn.disabled=true;btn.textContent='Searching...';
   document.getElementById('track-error').innerHTML='';document.getElementById('track-result').innerHTML='';
   const carrier = detectCarrier(num);
   // Try Supabase function first
@@ -1908,7 +1908,7 @@ async function trackPackage(){
     const events=data?.data?.accepted?.[0]?.track_info?.tracking?.providers?.[0]?.events||[];
     if(events.length>0){
       supabaseOk = true;
-      document.getElementById('track-result').innerHTML=`<div class="text-xs text-muted mb-2">识别为 ${carrier.name} 运单 · 数据来自 17track API</div>` + events.map(ev=>`
+      document.getElementById('track-result').innerHTML=`<div class="text-xs text-muted mb-2">Identified as ${carrier.name} shipment · Data from 17track API</div>` + events.map(ev=>`
         <div class="timeline-item"><div class="font-medium text-sm">${ev.description||ev.stage}</div><div class="time">${ev.time_iso||ev.time_utc} · ${ev.location||''}</div></div>
       `).join('');
     }
@@ -1917,20 +1917,20 @@ async function trackPackage(){
   if(!supabaseOk){
     document.getElementById('track-result').innerHTML=`
       <div class="alert alert-info mt-3">
-        <div class="font-bold mb-2">识别为 ${carrier.name} 运单</div>
-        <p class="text-sm mb-3">已自动识别承运商。请点击下方链接在官方平台查询实时物流状态：</p>
+        <div class="font-bold mb-2">Identified as ${carrier.name} shipment</div>
+        <p class="text-sm mb-3">Carrier auto-detected. Click the links below to track on the official platform:</p>
         <a href="${carrier.url}" target="_blank" rel="noopener" class="btn" style="display:inline-flex;gap:.5rem">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          在 ${carrier.name} 官网追踪
+          Track on ${carrier.name}
         </a>
         <div class="flex flex-wrap gap-2 mt-3">
-          <a href="https://t.17track.net/en#nums=${num}" target="_blank" rel="noopener" class="btn btn-muted btn-sm">17track 全球追踪</a>
-          <a href="https://parcelsapp.com/en/tracking/${num}" target="_blank" rel="noopener" class="btn btn-muted btn-sm">Parcels App 追踪</a>
-          <a href="https://www.ship24.com/tracking?p=${num}" target="_blank" rel="noopener" class="btn btn-muted btn-sm">Ship24 追踪</a>
+          <a href="https://t.17track.net/en#nums=${num}" target="_blank" rel="noopener" class="btn btn-muted btn-sm">17track Global Tracking</a>
+          <a href="https://parcelsapp.com/en/tracking/${num}" target="_blank" rel="noopener" class="btn btn-muted btn-sm">Parcels App Tracking</a>
+          <a href="https://www.ship24.com/tracking?p=${num}" target="_blank" rel="noopener" class="btn btn-muted btn-sm">Ship24 Tracking</a>
         </div>
       </div>`;
   }
-  btn.disabled=false;btn.textContent='追踪';
+  btn.disabled=false;btn.textContent='Track';
 }
 
 // ===================== EXCHANGE =====================
@@ -1942,7 +1942,7 @@ function updateExResult(){
   const amount=parseFloat(document.getElementById('ex-amount').value)||0;
   const result=amount*getRate(from)/getRate(to);
   document.getElementById('ex-result').textContent=result.toFixed(2)+' '+to;
-  document.getElementById('ex-rate').textContent=`汇率：1 ${from} = ${(getRate(from)/getRate(to)).toFixed(4)} ${to}`;
+  document.getElementById('ex-rate').textContent=`Rate: 1 ${from} = ${(getRate(from)/getRate(to)).toFixed(4)} ${to}`;
 }
 
 function swapCurrency(){const f=document.getElementById('ex-from'),t=document.getElementById('ex-to');const tmp=f.value;f.value=t.value;t.value=tmp;updateExResult();}
@@ -1967,7 +1967,7 @@ const HIST_KEY='tp_rate_hist_v6';
 async function loadHistory(){
   const currency=document.getElementById('ex-chart-cur').value;
   const days=parseInt(document.getElementById('ex-period').value);
-  const btn=document.getElementById('ex-update-btn');btn.disabled=true;btn.textContent='加载中...';
+  const btn=document.getElementById('ex-update-btn');btn.disabled=true;btn.textContent='Loading...';
   document.getElementById('ex-source').textContent='';
   try{
     // Check cache
@@ -1976,8 +1976,8 @@ async function loadHistory(){
     const cached=cache[key];
     const oneDay=24*60*60*1000;
     if(cached&&Date.now()-cached.generatedAt<oneDay&&cached.values?.length>2){
-      currentHistory=cached;renderChart(cached,currency,'本地缓存');
-      btn.disabled=false;btn.textContent='更新';return;
+      currentHistory=cached;renderChart(cached,currency,'Local Cache');
+      btn.disabled=false;btn.textContent='Update';return;
     }
     const data=await invokeFunction('exchange-rates',{mode:'history',from:'CNY',to:currency,days});
     const r=data?.rates||{};
@@ -1987,7 +1987,7 @@ async function loadHistory(){
       const fresh={labels,values,generatedAt:Date.now()};
       cache[key]=fresh;localStorage.setItem(HIST_KEY,JSON.stringify(cache));
       currentHistory=fresh;renderChart(fresh,currency,'Frankfurter API');
-    }else throw new Error('数据为空');
+    }else throw new Error('Data empty');
   }catch(e){
     // fallback
     const base={USD:7.25,EUR:7.85,GBP:9.15,JPY:0.048,AUD:4.75};const b=base[currency]||7.25;
@@ -1995,12 +1995,12 @@ async function loadHistory(){
     const end=new Date();
     for(let i=days-1;i>=0;i--){const d=new Date(end);d.setDate(end.getDate()-i);labels.push(d.toISOString().split('T')[0]);values.push(Number((b*(1+Math.sin((days-i)*0.55)*0.006+((days-i)/Math.max(days,1)-0.5)*0.012)).toFixed(currency==='JPY'?5:4)));}
     const fresh={labels,values,generatedAt:Date.now()};let cache={};try{cache=JSON.parse(localStorage.getItem(HIST_KEY)||'{}');}catch(e){}cache[`${currency}_${days}`]=fresh;localStorage.setItem(HIST_KEY,JSON.stringify(cache));
-    currentHistory=fresh;renderChart(fresh,currency,'模拟趋势');
-  }finally{btn.disabled=false;btn.textContent='更新';}
+    currentHistory=fresh;renderChart(fresh,currency,'Simulated Trend');
+  }finally{btn.disabled=false;btn.textContent='Update';}
 }
 
 function renderChart(history,currency,source){
-  document.getElementById('ex-source').textContent='数据源: '+source;
+  document.getElementById('ex-source').textContent='Source: '+source;
   const {labels,values}=history;
   const w=900,h=300,pad={l:60,r:20,t:30,b:40};
   const min=Math.min(...values),max=Math.max(...values);
@@ -2017,7 +2017,7 @@ function renderChart(history,currency,source){
   document.getElementById('ex-chart-wrap').innerHTML=`<svg viewBox="0 0 ${w} ${h}" class="chart-svg">
     <defs><linearGradient id="rL" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#1a56db"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
     <linearGradient id="rA" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a56db" stop-opacity="0.2"/><stop offset="100%" stop-color="#1a56db" stop-opacity="0.02"/></linearGradient></defs>
-    <text x="${pad.l}" y="20" fill="#0f172a" font-size="14" font-weight="700">${currency}/CNY 历史趋势</text>
+    <text x="${pad.l}" y="20" fill="#0f172a" font-size="14" font-weight="700">${currency}/CNY Historical Trend</text>
     <text x="${w-pad.r}" y="20" fill="${change>=0?'#059669':'#dc2626'}" font-size="13" font-weight="700" text-anchor="end">${change>=0?'▲':'▼'} ${Math.abs(change).toFixed(2)}%</text>
     ${yT.map(v=>`<g><line x1="${pad.l}" x2="${w-pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="#e5e7eb"/><text x="${pad.l-8}" y="${y(v)+4}" fill="#64748b" font-size="11" text-anchor="end">${fmt(v)}</text></g>`).join('')}
     <polyline points="${area}" fill="url(#rA)"/>
@@ -2105,8 +2105,8 @@ const I18N = {
     'cls.title': 'HS编码智能归类', 'cls.sub': 'UN Comtrade HS国际分类库 + 本地知识库 · 自动联动税率与监管',
     'risk.title': '贸易风险与合规检查', 'risk.sub': '管制识别 · 世界银行关税数据 · 制裁名单 · FTA协定分析',
     'batch.title': '批量HS编码查询与关税测算', 'batch.sub': 'Excel导入导出 · 批量HS归类 · 关税计算 · UN Comtrade + 世界银行数据',
-    'batch.step1': 'Step 1: 下载模板 / 手动输入', 'batch.step1.desc': '下载Excel模板，填写HS编码后上传；或直接在下方文本框输入。',
-    'batch.step2': 'Step 2: 上传Excel / 输入HS编码', 'batch.download': '下载Excel模板', 'batch.sample': '下载示例数据',
+    'batch.step1': 'Step 1: 下载模板', 'batch.step1.desc': '下载Excel模板，填写HS编码后上传；或直接在下方文本框输入。',
+    'batch.step2': 'Step 2: 上传Excel', 'batch.download': '下载Excel模板', 'batch.sample': '下载示例数据',
     'batch.upload': '上传Excel文件', 'batch.input.ph': '或直接输入HS编码（每行一个或逗号分隔）\n例: 85171200, 84713000, 33049900',
     'batch.origin': '原产国', 'batch.dest': '目的国', 'batch.value': '默认货值 (CNY)', 'batch.run': '批量查询', 'batch.export': '导出Excel结果',
     'hn.calc': '多国关税测算', 'hn.cls': 'HS归类', 'hn.risk': '合规检查', 'hn.vision': '图片归类',
@@ -2123,7 +2123,7 @@ const I18N = {
     'log.inspect': '商检费 (+¥600)', 'log.warehouse': '仓储费 (+¥400)', 'log.delivery': '目的港派送 (+¥1200)',
     'log.calcbtn': '估算全链路落地成本',
     'track.title': '国际物流追踪', 'track.sub': '智能识别承运商 · DHL/FedEx/UPS/EMS/顺丰/中通/圆通/Maersk · 多平台追踪',
-    'track.note': '自动识别运单承运商 · 支持 17track / Parcels App / Ship24 / 承运商官网多平台追踪',
+    'track.note': '自动识别运单承运商 · 支持 17track',
     'ex.title': '实时金融汇率引擎', 'ex.sub': 'Frankfurter API · 历史走势缓存 · 多币种自动折算',
     'ex.swap': '⇅ 互换', 'ex.live': '实时汇率表', 'ex.hist': '历史走势图',
     'ex.cur': '货币', 'ex.rate': '汇率(CNY)', 'ex.update': '更新',
@@ -2142,8 +2142,8 @@ const I18N = {
     'cls.title': 'HS Code Classification', 'cls.sub': 'UN Comtrade HS International Database + Local Knowledge Base · Auto Tax & Regulation Linking',
     'risk.title': 'Trade Risk & Compliance Check', 'risk.sub': 'Export Control · World Bank Tariff Data · Sanctions List · FTA Analysis',
     'batch.title': 'Batch HS Code & Tariff Search', 'batch.sub': 'Excel Import/Export · Batch HS Lookup · Tariff Calculation · UN Comtrade + World Bank Data',
-    'batch.step1': 'Step 1: Download Template / Manual Input', 'batch.step1.desc': 'Download the Excel template, fill in HS codes and upload; or type directly below.',
-    'batch.step2': 'Step 2: Upload Excel / Enter HS Codes', 'batch.download': 'Download Template', 'batch.sample': 'Download Sample Data',
+    'batch.step1': 'Step 1: Download Template', 'batch.step1.desc': 'Download the Excel template, fill in HS codes and upload; or type directly below.',
+    'batch.step2': 'Step 2: Upload Excel', 'batch.download': 'Download Template', 'batch.sample': 'Download Sample Data',
     'batch.upload': 'Upload Excel', 'batch.input.ph': 'Or enter HS codes (one per line or comma-separated)\ne.g.: 85171200, 84713000, 33049900',
     'batch.origin': 'Origin', 'batch.dest': 'Destination', 'batch.value': 'Default Value (CNY)', 'batch.run': 'Batch Search', 'batch.export': 'Export to Excel',
     'hn.calc': 'Tariff Calc', 'hn.cls': 'HS Classify', 'hn.risk': 'Compliance', 'hn.vision': 'Image ID',
@@ -2160,7 +2160,7 @@ const I18N = {
     'log.inspect': 'Inspection (+¥600)', 'log.warehouse': 'Storage (+¥400)', 'log.delivery': 'Dest. Delivery (+¥1200)',
     'log.calcbtn': 'Estimate Full Landed Cost',
     'track.title': 'Intl. Shipment Tracking', 'track.sub': 'Auto Carrier Detection · DHL/FedEx/UPS/EMS/SF/ZTO/YTO/Maersk · Multi-platform',
-    'track.note': 'Auto carrier detection · 17track / Parcels App / Ship24 / Carrier official sites',
+    'track.note': 'Auto carrier detection · 17track',
     'ex.title': 'Live FX Rate Engine', 'ex.sub': 'Frankfurter API · Historical Trends · Multi-currency Conversion',
     'ex.swap': '⇅ Swap', 'ex.live': 'Live Rates', 'ex.hist': 'Historical Chart',
     'ex.cur': 'Currency', 'ex.rate': 'Rate (CNY)', 'ex.update': 'Update',
@@ -2394,7 +2394,7 @@ async function runBatchSearch() {
     // API lookup
     const item = await lookupHSCodeAPI(code);
     let name = zh?'未知':'Unknown', source = 'none';
-    if (item) { name = item.name; source = item.source; }
+    if (item) { name = zh&&item.nameZh?item.nameZh:item.name; source = item.source; }
     // Country-aware tariff calculation
     const tariffInfo = getDutyRate(origin, dest, code);
     const vatRate = getVatRate(dest);
@@ -2517,6 +2517,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"75124c326cb447fe934cde04713ae013","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
